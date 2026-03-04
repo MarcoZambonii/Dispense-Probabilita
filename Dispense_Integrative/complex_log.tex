@@ -1,0 +1,73 @@
+\section{Logaritmo Complesso}
+Sia \(z \in \mathbb{C}\) con \(z \neq 0\). Cercare il logaritmo di \(z\) significa
+determinare un numero complesso \(w \in \mathbb{C}\) tale che $e^{w} = z$. Nel contesto complesso, tuttavia, l’esponenziale non è iniettivo: di conseguenza,
+l’equazione precedente ammette \emph{infinite soluzioni}, tutte della forma
+\[
+w = \ln|z| + i\,\text{Arg}(z) + i\,2\pi k, \qquad k \in \mathbb{Z},
+\]
+poiché moltiplicare \(z\) per \(e^{i2\pi k}\) equivale a ruotare il vettore di un angolo
+\(2\pi k\), riportandolo esattamente su se stesso.
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[scale=1.2, >=stealth]
+
+  % Assi
+  \draw[->] (-0.1,0) -- (3,0) node[below right] {$\Re(z)$};
+  \draw[->] (0,-0.1) -- (0,2) node[above left] {$\Im(z)$};
+
+  % Origine e punto z
+  \coordinate (O) at (0,0);
+  \coordinate (Z) at (2,1.2);
+
+  % Vettore z
+  \draw[red, thick,->] (O) -- (Z) node[above right] {$z$};
+
+  % Arco dell'argomento
+  \draw[thick] (1,0) arc (0:31:1);
+  \node at (1.5,0.35) {$\text{Arg}(z)$};
+\end{tikzpicture}
+\end{figure}
+
+Per trattare in modo univoco il logaritmo complesso, è necessario selezionare
+una delle sue infinite determinazioni e definirne una come \emph{logaritmo principale}.
+Si introduce dunque la funzione
+\(
+\text{Log} : \mathbb{C}\setminus\{0\} \longrightarrow \mathbb{C}
+\)
+definita da
+\[
+\text{Log}(z) = \ln|z| + i\,\text{Arg}(z),
+\qquad \text{Arg}(z) \in [0,2\pi)
+\]
+dove si fissa l'argomento nel semintervallo \([0,2\pi)\) per garantire
+l’unicità della determinazione.
+
+\bigskip
+\noindent Il logaritmo complesso ha le seguenti proprietà:
+\begin{itemize}
+    \item $\text{Log}(e^z) = z$
+    \item $e^{\text{Log}(z_1\cdot z_2)} = e^{\text{Log}(z_1) + Log(z_2)};\quad$  NON vale che $\text{Log}(z_1\cdot z_2) = \text{Log}z_1 + \text{Log}z_2$
+    \item Sul disco di convergenza $D = \set{z\in\mathbb C:\;|z|<1}$ vale che:
+    \(\quad \text{Log}(1+z) = z-\frac12 z^2 + \frac13 z^3 + \cdots\).\\
+    Allora avremo che:
+    \begin{itemize}
+        \item $\begin{aligned} \lim_{z\to 0}\frac{\text{Log}(1+z)}{z} =1\end{aligned}$
+        \item Data una successione conergente $\;z_n\longrightarrow z$, allora:
+        \begin{align*}
+            \left(1+\frac{z_n}{n}\right)^n & = e^{n\text{Log}\left(1+\frac{z_n}{n}\right)} = e^{n\left[\frac{z_n}{n} + o\left(\frac{z_n}{n}\right)\right]}\\
+             & = e^{z_n} \cdot e^{o\left(\frac{z_n}{n}\right)} \longrightarrow e^z
+        \end{align*}
+        $\Rightarrow \quad \left(1+\frac{z_n}{n}\right)^n\longrightarrow e^z$
+    \end{itemize}
+\end{itemize}
+
+\begin{esempio}
+    Nell'esempio a pagina \pageref{es:convlegge} abbiamo detto che $X_n\sim Bin(n , \lambda/n) \overset{\mathcal{L}}{\longrightarrow} X\sim Po(\lambda).$ Grazie al logaritmo principale possiamo dimostrarlo:
+    \begin{align*}
+        \varphi_{X_n}(u) = \left[e^{iu} \frac \lambda n + \left(1-\frac{\lambda}{n}\right)\right]^n = \left[1+\left(e^{iu-1}\right)\frac\lambda n\right]
+        ^n \longrightarrow e^{(e^{iu}-1)\lambda} = \varphi X(u)
+    \end{align*}
+\end{esempio}
+
+\newpage 

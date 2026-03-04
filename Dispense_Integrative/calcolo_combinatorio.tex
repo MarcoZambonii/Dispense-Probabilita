@@ -1,0 +1,40 @@
+\section{Calcolo Combinatorio}
+
+Cercheremo di evitare le definizioni eccessivamente formali, e ci concentreremo sull'effettivo uso pratico dei vari strumenti.
+
+\subsection{Permutazioni}
+
+La permutazione semplice risponde alla domanda: \textit{``quanti sono i modi possibili di ordinare $n$ elementi distinti?''}.
+
+\medskip
+\noindent Si ha che questo numero è
+\[\boxed{P_n = n!}\] 
+Nel caso si abbiano oggetti non distinti ma con ripetizioni, allora
+\[\boxed{P_n^* = \frac{n!}{k_1!\cdots k_n!}}\qquad \text{dove}\qquad n = \begin{cases}
+    k_1\quad &\text{tipo }1\\
+    &\vdots\\
+    k_n\quad &\text{tipo }n
+\end{cases}\]
+
+\noindent Se gli oggetti non distinti fossero solo di due tipi, allora si ricadrebbe nel coefficiente binomiale:
+\[P_n = \frac{n!}{k_1!k_2!} = \frac{n!}{k_1!(n-k_1)!}\]
+
+\subsection{Disposizioni}
+Le disposizioni semplici rispondono alla domanda: \textit{``In quanti modi posso ordinare $n$ oggetti distinti (presi una sola volta) in $k$ posti differenti?''}
+
+\[\boxed{D_{n, k} = \frac{n!}{(n-k)!}}\]
+
+\noindent Nel caso in cui volessimo contare gli $n$ oggetti con ripetizione, allora avremmo:
+\[\boxed{D_{n. k}^* = n^k}\]
+
+$\Rightarrow \quad$ In tutti i tipi di disposizioni, l'ordine degli oggetti è rilevante!
+
+\subsection{Combinazioni}
+
+Le combinazioni semplici rispondono a: \textit{`` in quanti modi posso scegliere $n$ oggetti (presi una volta) di classe $k$, prescindendo dall'ordine''}
+\[\boxed{C_{n, k} = \binom{n}{k} = \frac{n!}{k!(n-k)!}}\]
+
+\noindent Nel caso in cui gli oggetti si possano prendere con ripetizione:
+\[\boxed{C_{n_k}^* = \binom{n+k-1}{k}}\]
+
+$\Rightarrow \quad$ In tutti i tipi di combinazione, l'ordine degli oggetti non è rilevante!

@@ -1,0 +1,175 @@
+\section{Geometrica}
+Modella il numero di prove necessarie per ottenere il primo successo in una sequenza di prove di bernoulli indipendenti, ciascuna con probabilità di successo $p$.
+\[
+\mathcal{G}(p)
+\]
+
+\begin{figure}[H]
+\centering
+
+\begin{minipage}{0.45\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$\mathbb{P}(X=k)$},
+    xlabel = {$k$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 0.45,
+    xmin = 0, xmax = 31,
+    legend style={at={(axis cs: 1,0.43)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- Geometrica(p=0.3) ---
+\addplot[
+    only marks,
+    black,
+    mark=*,
+    mark options={fill=black, scale=0.7}
+]
+coordinates {
+(1,0.3)(2,0.21)(3,0.147)(4,0.1029)(5,0.07203)
+(6,0.050421)(7,0.035295)(8,0.024706)(9,0.017294)
+(10,0.012106)(11,0.008474)(12,0.005932)(13,0.004152)
+(14,0.002907)(15,0.002035)(16,0.001425)
+(17,0.000998)(18,0.000699)(19,0.000489)
+(20,0.000342)(21,0.000240)(22,0.000168)
+(23,0.000118)(24,0.000083)(25,0.000058)
+(26,0.000041)(27,0.000029)(28,0.000020)
+(29,0.000014)(30,0.000010)
+};
+
+% --- Geometrica(p=0.6) ---
+\addplot[
+    only marks,
+    gray!60,
+    mark=*,
+    mark options={fill=gray!60, scale=0.7}
+]
+coordinates {
+(1,0.6)(2,0.24)(3,0.096)(4,0.0384)(5,0.01536)
+(6,0.006144)(7,0.002458)(8,0.000983)
+(9,0.000393)(10,0.000157)(11,0.000063)
+(12,0.000025)(13,0.000010)(14,0.000004)
+(15,0.000002)(16,0.000001)
+};
+
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$F(k)$},
+    xlabel = {$k$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 1.1,
+    xmin = 0, xmax = 31,
+    legend style={at={(axis cs: 20,0.25)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- CDF Geometrica(p=0.3) ---
+\addplot[
+    jump mark left,
+    black,
+    mark=*,
+    mark options={fill=black, scale=0.7}
+]
+coordinates{
+(1,0.3)(2,0.51)(3,0.657)(4,0.7599)(5,0.83193)
+(6,0.882351)(7,0.917646)(8,0.942352)
+(9,0.959647)(10,0.971753)(11,0.980227)
+(12,0.986159)(13,0.990311)(14,0.993218)
+(15,0.995252)(16,0.996677)(17,0.997675)
+(18,0.998374)(19,0.998863)(20,0.999205)
+(21,0.999445)(22,0.999613)(23,0.999731)
+(24,0.999814)(25,0.999872)(26,0.999913)
+(27,0.999942)(28,0.999962)(29,0.999976)
+(30,0.999983)
+};
+\addlegendentry{$p=0.3$}
+
+% --- CDF Geometrica(p=0.6) ---
+\addplot[
+    jump mark left,
+    gray!60,
+    mark=*,
+    mark options={fill=gray!60, scale=0.7}
+]
+coordinates{
+(1,0.6)(2,0.84)(3,0.936)(4,0.9744)(5,0.98976)
+(6,0.995904)(7,0.998362)(8,0.999345)
+(9,0.999738)(10,0.999895)(11,0.999958)
+(12,0.999983)(13,0.999993)(14,0.999997)
+(15,0.999999)
+};
+\addlegendentry{$p=0.6$}
+
+\end{axis}
+\end{tikzpicture}
+
+\end{minipage}
+\end{figure}
+
+
+\bigskip
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Supporto} 
+& $\{1,2,3,\dots\}\subset\mathbb{Z}$ \\
+
+\midrule
+
+\textbf{Funzione di Densità} 
+& $\mathbb{P}(X=k)=p(1-p)^{k-1}$,\quad $k=1,2,3,\dots$ \\
+
+\midrule
+
+\textbf{Funzione di Ripartizione}
+& $F(k)=\mathbb{P}(X\le k)=1-(1-p)^k$ \\
+
+\midrule
+
+\textbf{Valore atteso} 
+& $\mathbb{E}[X]=\dfrac{1}{p}$ \\
+
+\midrule
+
+\textbf{Varianza}
+& $Var(X)=\dfrac{1-p}{p^2}$ \\
+
+\midrule
+
+\textbf{Funzione caratteristica}
+& $\varphi_X(u)=\dfrac{pe^{iu}}{1-(1-p)e^{iu}}$\\
+
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent La Geometrica è l’unica variabile aleatoria discreta che gode della
+\emph{proprietà di assenza di memoria}.
+Ciò significa che la probabilità di dover attendere ancora un certo numero di prove
+non dipende dal numero di insuccessi già osservati.
+
+\smallskip
+\noindent 
+Formalmente per ogni $m,n \in \mathbb{N}$ vale:
+\[
+\mathbb{P}(X > m+n \mid X > m)
+=
+\mathbb{P}(X > n).
+\]
+
+

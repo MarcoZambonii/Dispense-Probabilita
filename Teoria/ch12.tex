@@ -1,0 +1,302 @@
+\chapter{Funzione Caratteristica}
+
+Dalla teoria sviluppata finora sappiamo che una probabilità definita su 
+$(\mathbb{R}, \mathcal{B})$ può essere completamente caratterizzata attraverso la 
+funzione di ripartizione e, quando esiste, la densità (sia essa discreta o continua). Abbiamo inoltre visto che, nel caso multidimensionale $(\mathbb{R}^n, \mathcal{B}^n)$, la densità congiunta gioca un ruolo analogo, consentendo di caratterizzare la legge di un vettore aleatorio.
+
+\medskip
+\noindent
+In questo capitolo introdurremo un nuovo strumento di caratterizzazione delle probabilità: la \textbf{funzione caratteristica}. Essa presenta una serie di notevoli vantaggi teorici e pratici, poiché consente di trattare in modo unificato sia variabili discrete sia continue, semplifica il calcolo dei valori attesi e dei momenti, e facilità lo studio di proprietà fondamentali quali indipendenza, continuità e combinazioni lineari di variabili aleatorie.\\
+\\
+È un principio ricorrente in matematica che spesso sia possibile comprendere o risolvere un problema trasformandolo in un altro spazio, affrontandolo lì e poi riportando la soluzione nello spazio originale.
+
+\medskip
+Tra le trasformazioni più importanti figurano la trasformata di Laplace e la trasformata di Fourier. Sebbene esse siano largamente impiegate nello studio delle equazioni differenziali, si rivelano strumenti straordinariamente potenti anche nell’ambito della teoria della probabilità. Permettono, infatti, di analizzare variabili aleatorie e di fornire dimostrazioni brevi ed eleganti di risultati fondamentali, come il Teorema del Limite Centrale (che vedremo in seguito). Tra le due, la trasformata di Fourier è la più raffinata e versatile, e per questo motivo rappresenta lo strumento di maggiore utilità nelle applicazioni probabilistiche.
+
+\begin{definizione}
+    Sia $\mathbb{P}$ una probabilità su $\mathcal{B}^n$, definiamo la funzione caratteristica di $\mathbb{P}$ la seguente funzione $\varphi:\mathbb{R}^n\to\mathbb{C}, \;$ definita come segue:
+    \[\boxed{\varphi(\ve{u}) = \int_{\mathbb{R}^n}e^{i\scalar{u}{x}}\;d\mathbb{P}}\qquad \forall \ve{u}\in\mathbb{R}^n\]
+    Come notazione alternativa, per tenere conto che è una trasformazione di una misura di probabilità, si può usare: $\quad \widehat{\mathbb{P}}\equiv \varphi$.
+\end{definizione}
+
+\noindent Avendo solo la definizione, possiamo già fare alcune osservazioni fondamentali.\\
+\\
+\(\bigstar \;\) $\varphi$ è a valori complessi, e l'integranda è $e^{i\scalar{u}{x}}$, dove:
+\[\scalar{u}{x} = \sum_{k=1}^n u_kx_k = \theta\in \mathbb{R}\]
+
+Di conseguenza avremo che la funzione integranda è tale che:
+\[e^{i\scalar{u}{x}} = e^{i\theta} = \cos\theta+ i\sin\theta \quad \Rightarrow\quad \left|e^{i\scalar{u}{x}}\right| = \sqrt{\cos^2\theta+ \sin^2\theta} = 1\]
+
+\bigskip
+\noindent \(\bigstar \;\) Siccome $h:\mathbb{R}^n\to\mathbb{C}, \;$ possiamo vederla come:
+\[h(\ve{x}) = \Re(h(\ve{x}))+ i\Im(h(\ve{x})):=h_1(\ve{x})+ i h_2(\ve{x})\]
+
+Dove si ha quindi che $h_1, h_2:\mathbb{R}^n\to \mathbb{R}, \;$ allora:
+\[\int_{\mathbb{R}^n}h(\ve{x})\;d\mathbb{P} = \int_{\mathbb{R}^n}h_1(\ve{x})\;d\mathbb{P}+i\int_{\mathbb{R}^n}h_2(\ve{x})\;d\mathbb{P} \qquad \text{``}=\text{''} \begin{bmatrix}
+    \int_{\mathbb{R}^n}h_1(\ve{x})\;d\mathbb{P}\\
+    \int_{\mathbb{R}^n}h_2(\ve{x})\;d\mathbb{P}
+\end{bmatrix}\]
+
+Ossia che possiamo rappresentare geometricamente $\mathbb{C}$ come il piano $\mathbb{R}^2$. \footnote{Tecnicamente infatti $\mathbb{C}$ e $\mathbb{R}^2$ sono omeomorfi come spazi topologici metrici, attraverso la trasformazione $(a +ib)\leftrightarrow(a, b)$}
+
+\bigskip
+\noindent \(\bigstar \;\) Tutte le proprietà che abbiamo visto precedentemente per l'integrale di funzioni a valori reali
+\[\int_{\mathbb{R}^n}f\;d\mathbb{P}, \qquad \text{con}\qquad f:\mathbb{R}^n\to \mathbb{R}\]
+
+valgono anche per funzioni a valori complessi
+\[\int_{\mathbb{R}^n}h\;d\mathbb{P}, \qquad \text{con}\qquad h:\mathbb{R}^n\to \mathbb{C}\]
+
+In particolare:
+\[h\in L^1(\mathbb{P})\quad \iff \quad h_1 = \Re(h_1), \;h_2 = \Im(h_2) \;\in L^1(\mathbb{P})\]
+
+In tal caso, posso stimare l'integrale complesso con uno reale:
+\[\boxed{\left|\int_{\mathbb{R}^n}h(\ve{x})\;d\mathbb{P}\right|\leq \int_{\mathbb{R}^n}\left|h(\ve{x})\right|\;d\mathbb{P}}\]
+
+\bigskip
+\noindent 
+\(\bigstar \;\) Abbiamo già notato che $\left|e^{i\scalar{u}{x}}\right|  = 1$, e unendo questo fatto con l'ultima osservazione, possiamo dire che:
+\[\left|\varphi(\ve{u})\right| = \left|\int_{\mathbb{R}^n} e^{i\scalar{u}{x}}\;d\mathbb{P}\right| \leq \int_{\mathbb{R}^n}\left|e^{i\scalar{u}{x}}\right|\;d\mathbb{P} = \int_{\mathbb{R}^n}d\mathbb{P} = 1 \]
+
+Ricavando che la funzione caratteristica è di natura limitata: $\boxed{\left|\varphi(\ve{u})\right|\leq 1}$.
+
+\begin{definizione}
+    Dato $\ve{X}:(\Omega, \mathcal{A}, \mathbb{P})\to (\mathbb{R}^n, \mathcal{B}^n)$ vettore aleatorio con legge $P^{\ve{X}}$ su $\mathcal{B}^n$, si definisce funzione caratteristica di $\ve{X}$ la funzione:
+    \[\varphi_{\ve{X}}(\ve{u}) := \hat{P}^{\ve{X}}(\ve{u}) = \int_{\mathbb{R}^n} e^{i\scalar{u}{x}}\;dP^{\ve{X}}\]
+    Grazie alla legge del valore atteso diventa:
+    \begin{align*}
+    \varphi_{\ve{X}}(\ve{u}) & = \int_{\mathbb{R}^n} e^{i\scalar{u}{x}}\;dP^{\ve{X}} = \int_{\mathbb{R}^n} e^{i\scalar{u}{X}}\;d\mathbb{P}\\
+    & = E\left[e^{i\scalar{u}{X}}\right] \\ 
+    & = E\left[\cos(\scalar{u}{X})\right] + i E\left[\sin(\scalar{u}{X})\right]
+    \end{align*}
+\end{definizione}
+
+\bigskip
+\noindent Ora che abbiamo dato tutte le definizioni formali, facciamo qualche esempio per capire nel concreto cosa è la funzione caratteristica.
+
+\begin{esempio}
+    Sia $X = \mu\in \mathbb{R}$ quasi certamente, allora $\forall u\in\mathbb{R}$:
+    \[\varphi_X(u) = \E{e^{iuX}} = e^{iu\mu}\cdot P^X(\{\mu\}) = e^{iu\mu} = \cos(u\mu) + i\sin(u\mu)\]
+    Si noti come la $\varphi_X$ è una funzione esclusivamente di $u$, come già era esplicito nella definizione.
+\end{esempio}
+\begin{esempio}
+    Sia $X\sim Po(\lambda), \; p_X(k) = \frac{\lambda^k}{k!}e^{-\lambda}, \;k\in\mathbb{N}$. Allora la funzione caratteristica si è:
+    \begin{align*}
+        \varphi_X(u) & = E[\underbrace{e^{iuX}}_{h(X)}] = \sum_{k=0}^{+\infty} e^{iuk} p_X(k) = \sum_{k=0}^{+\infty} e^{iuk} \frac{\lambda^k}{k!}e^{-\lambda} = \sum_{k=0}^{+\infty} \frac{(e^{iu}\lambda)^k}{k!} e^{-\lambda} \\ 
+        & = e^{-\lambda} \sum_{k=0}^{+\infty}\frac{(e^{iu}\lambda)^k}{k!} = e^{-\lambda} e^{e^{iu}\lambda}\\
+        & = e^{\lambda(e^{iu}-1)}
+    \end{align*}
+\end{esempio}
+
+\begin{esempio}
+    Sia $X\sim \mathcal{E}(\lambda), \;\lambda>0,\; f_X(u) = \lambda e^{-\lambda x}\mathbb{I}_{[0, +\infty)}(x)$. Allora per ogni $u\in\mathbb{R}:$
+    \[\varphi_X(u) = \E{e^{iuX}} = \int_\mathbb{R}e^{iux}f_X(x)\;dx = \int_0^{+\infty}e^{iux}\lambda e^{-\lambda x}\;dx = \frac{\lambda}{iu-\lambda}\]
+\end{esempio}
+
+\begin{teorema}[Proprietà della Funzione Caratteristica]
+\label{th:12.3}
+    Sia $\mathbb{P}$ una misura di probabilità su $\mathcal{B}^n$, con $\widehat{\mathbb{P}}$ la sua funzione caratteristica. Allora valgono le seguenti:
+    \begin{enumerate}
+        \item $\widehat{\mathbb{P}}$ caratterizza univocamente $\mathbb{P}$. \\
+        Ossia che, se $\mathbb{Q}$ è un'altra misura di probabilità su $\mathcal{B}^n$ con $\widehat{\mathbb{Q}}\,, \;$ allora:
+        \[\mathbb{P}(A) = \mathbb{Q}(A) \quad \forall A\in \mathcal{B}^n \qquad \iff \qquad \widehat{\mathbb{P}}(\ve{u}) = \widehat{\mathbb{Q}}(\ve{u})\quad \forall \ve{u}\in\mathbb{R}^n\]
+        \item Data una funzione caratteristica $\varphi:\mathbb{R^n}\to \mathbb{C}$  di una qualsiasi probabilità $\mathbb{P}$ su $\mathcal{B}^n,\; $ allora è vero che:
+        \begin{enumerate}
+            \item $\varphi$ è continua
+            \item $\varphi$ è limitata 
+            \item $\varphi(\ve{0}) = 1$
+        \end{enumerate}
+    \end{enumerate}
+    \begin{dimostrazione}
+        Dimostreremo solo la 2.
+        \begin{enumerate}
+            \item Definiamo la successione $\;\ve{u}_k \underset{\small k\to+\infty}{\longrightarrow} \ve{u}$ in $\mathbb{R}^n$. Dobbiamo dimostrare che $\varphi(\ve{u}_k)\to \varphi(\ve{u})$.\\
+            Senza perdere di generalità, poniamoci nel caso in cui $n=1$. Per continuità di $u\mapsto e^{iux}$, sappiamo che $e^{iu_kx}\to e^{iux}\quad \forall x\in \mathbb{R}$. Inoltre sappiamo che $\left|e^{iu_k x}\right|\leq1 \quad \forall k$. 
+
+            \medskip
+            \noindent Allora possiamo applicare il Teorema di Lebesgue (della convergenza dominata), e allora posso scambiare integrale e limite, trovando che:
+            \[\int_{\mathbb{R}^n} e^{iu_k x}\;d\mathbb{P} \longrightarrow \int_{\mathbb{R}^n} e^{iu x}\; d\mathbb{P} \quad \Rightarrow \quad \varphi(u_k)\to \varphi(u)\] 
+        \end{enumerate}
+    \end{dimostrazione}
+\end{teorema}
+
+\begin{teorema}
+\label{th:12.4}
+    Sia $\ve{X}: (\Omega, \mathcal{A}, \mathbb{P})\to (\mathbb{R}^n, \mathcal{B}^n)$ un vettore aleatorio, con funzione caratteristica $\varphi_{\ve{X}}$. Allora valgono le seguenti:
+    \begin{enumerate}
+        \item Se $\ve{X} \in L^m(\mathbb{P})$ (ossia che $\E{\left|X_k\right|^m}<+\infty, \;\forall k=1, ..., n$). Siano $k_1, ..., k_m\in \{1, ..., n\}$ allora:
+        \[\varphi_{\ve{X}}\in C^m(\mathbb{R}^n, \mathbb{C})\qquad \text{ e }\qquad \boxed{\frac{\partial^m}{\partial u_{k_1}\cdots \partial u_{k_m}}\varphi_{\ve{X}}(\ve{u}) = i^m\;\E{X_{k_1}\cdots X_{k_m} e^{i\scalar{u}{x}}}}\]
+        \item $\ve{Y} = A\ve{X}+\ve{b}, \; A\in M(k\times n), \;\ve{b}\in \mathbb{R}^k: \quad \Rightarrow \quad \forall \ve{v}\in \mathbb{R}^k\qquad \boxed{\varphi_{\ve{Y}}(\ve{v}) = e^{i\scalar{v}{b}}\cdot \varphi_{\ve{X}}(A^\top\ve{v})}$
+        \item $X_1, ..., X_n$ sono $n$ variabili aleatorie indipendenti $\quad \iff \quad \varphi_{\ve{X}}(u_1, ..., u_n) = \varphi_{X_1}(u_1)\cdots \varphi_{X_n}(u_n)$
+    \end{enumerate}
+    \begin{dimostrazione}
+        Della prima mostreremo solo un'idea di come si svolge la dimostrazione.
+        \begin{enumerate}
+            \item Siccome $X_k\in L^m(\mathbb{P})\Rightarrow |X_{k_1}\cdots X_{k_m}|\in L^1(\mathbb{P})\Rightarrow\;e^{i\scalar{u}{x}}\cdot X_{k_1}\cdots X_{k_m} \in L^1(\mathbb{P})$
+
+            Osserviamo anzitutto che, per ogni $k\in\{1,\dots,n\},\quad  
+\frac{\partial}{\partial u_k} e^{i \langle \ve{u}, \ve{X}\rangle}
+= i X_k\, e^{i \langle \ve{u}, \ve{X}\rangle}$. Iterando questa identità, per una qualunque $m$-upla di indici
+$k_1,\dots,k_m$, otteniamo
+\[
+\frac{\partial^m}{\partial u_{k_1}\cdots \partial u_{k_m}}
+e^{i \langle \ve{u}, \ve{X}\rangle}
+= i^m \, X_{k_1}\cdots X_{k_m}\,
+e^{i \langle \ve{u}, \ve{X}\rangle}
+\]
+Siccome possiamo integrare, e scambiare il segno di integrale e derivata (non dimostrato), otteniamo che:
+\begin{align*}
+    & \int_{\mathbb{R}^n}\frac{\partial^m}{\partial u_{k_1}\cdots \partial u_{k_m}}
+    e^{i \langle \ve{u}, \ve{X}\rangle}
+    = \int_{\mathbb{R}^n}i^m \, X_{k_1}\cdots X_{k_m}\,
+    e^{i \langle \ve{u}, \ve{X}\rangle}    \\
+    \Rightarrow \quad  &\frac{\partial^m}{\partial u_{k_1}\cdots \partial u_{k_m}} \varphi_{\ve{X}} (\ve{u}) = i^m\cdot \E{X_{k_1}\cdots X_{k_m}\,
+    e^{i \langle \ve{u}, \ve{X}\rangle}}
+\end{align*}
+            \item Per definizione abbiamo che:
+            \begin{align*}
+                \varphi_{\ve{Y}} (\ve{u}) & = \E{e^{i\scalar{Y}{u}}} = \E{e^{i \left\langle A\ve{X} + \ve{b}, \ve{u}\right\rangle}} = \E{e^{i \left\langle A\ve{X}, \ve{u}\right\rangle} \cdot e^{i \left\langle\ve{b}, \ve{u}\right\rangle}} = e^{i \left\langle\ve{b}, \ve{u}\right\rangle}\cdot \E{e^{i \left\langle A\ve{X}, \ve{u}\right\rangle}} \\
+                & =  e^{i \left\langle\ve{b}, \ve{u}\right\rangle}\cdot \E{e^{i \left\langle \ve{X}, A^\top\ve{u}\right\rangle}} = e^{i\scalar{b}{u}}\cdot \varphi_{\ve{X}}(A^\top \ve{u})
+            \end{align*}
+            \item Dimostriamo prima l'implicazione $(\Rightarrow)$: sapendo che $X_1,..., X_n$ sono indipendenti:
+            \begin{align*}
+                \varphi_{\ve{X}} (\ve{u}) & = \E{e^{i\scalar{u}{X}}} = \E{e^{\sum_{k=1}^n u_kX_k}} = \E{e^{iu_1 X_1}\cdots e^{iu_n X_n}} \overset{\ind}{=} \E{e^{iu_1 X_1}}\cdots \E{e^{iu_n X_n}} \\
+                & = \varphi_{X_1}(u_1)\cdots \varphi_{X_n}(u_n)
+            \end{align*}
+            Per quanto riguarda l'implicazione $(\Leftarrow)$:
+            \begin{align*}
+                \widehat{P^{X_1}\otimes\cdots \otimes P^{X_n}} & = \int_{\mathbb{R}^n} e^{i\scalar{u}{X}}\; dP^{X_1}\otimes \cdots \otimes P^{X_n} \overset{\text{F.T.}}{=} \int_\mathbb{R}e^{iuX_1}\;dP^{X_1} \cdots \int_\mathbb{R}e^{iuX_n}\;dP^{X_n}\\
+                & = \varphi_{X_1}(u_1)\cdots \varphi_{X_n}(u_n) \overset{\text{Per ipotesi}}{=} \widehat{P}^{\ve{X}}
+            \end{align*}
+            Si dimostra quindi che: $\; \widehat{P}^{\ve{X}} = \widehat{P^{X_1}\otimes\cdots \otimes P^{X_n}}\;$ e siccome la funzione caratteristica caratterizza la probabilità (Teorema \ref{th:12.3}), abbiamo che $\ve{X}$ ha componenti indipendenti.
+        \end{enumerate}
+    \end{dimostrazione}
+\end{teorema}
+
+Il primo punto di questo teorema è particolarmente interessante, infatti questo afferma che possiamo effettuare uno scambio tra la derivata e l'integrale (valore atteso):
+\[
+\frac{\partial^n}{\partial u_{k_1} \cdots \partial u_{k_n}}
+E\!\left[\,\cdot\,\right] = E\!\left[\frac{\partial^n}{\partial u_{k_1} \cdots\partial u_{k_n}}\,\cdot\,\right]\]
+Inoltre semplifica di molto il calcolo dei valori attesi, varianze e covarianze, banalmente utilizzando $\varphi_{\ve{X}}(\ve{0})$. Infatti, se $X_k\in L^2\;\forall k$, allora:
+\begin{itemize}
+    \item $\E{X_k} = -i\varphi'_{X_k}(0)$
+    \item $\E{X^2_k} = -\varphi''_{X_k}(0)\quad \Rightarrow\quad Var(X_k) = -\varphi''_{X_k}(0) + \bigl(-i\varphi'_{X_k}(0)\bigr)^2$
+    \item $\E{X_k\cdot X_j} = -\frac{\partial^2}{\partial u_k\partial u_j}\varphi_{\ve{X}}(\ve{0})\quad \Rightarrow\quad Cov(X_k, X_j) = \frac{-\partial^2}{\partial u_k\partial u_j}\varphi_{\ve{X}}(\ve{0}) + \varphi'_{X_k}(0)\cdot \varphi'_{X_j}(0)$
+\end{itemize}
+\begin{corollario}
+    Siano $\ve{X}_1$ un vettore aleatorio in $\mathbb{R}^n$, e $\ve{X}_2$ un vettore aleatorio in $\mathbb{R}^k$. Sia $\ve{X} := \begin{bmatrix}\ve{X}_1\\\ve{X}_2\end{bmatrix},\;$ allora:
+    \[\ve{X}_1 \ind \ve{X}_2 \quad \iff \quad \varphi_{\ve{X}}(\ve{u}_1, \ve{u}_2) = \varphi_{\ve{X}_1}(\ve{u}_1)\cdot \varphi_{\ve{X}_2}(\ve{u}_2)\]
+\end{corollario}
+
+\begin{corollario}
+    Se $\ve{X}=\begin{bmatrix}X_1 \\ \vdots \\X_n\end{bmatrix}$ è a componenti indipendenti, allora:
+    \[\varphi_{X_1+\cdots+X_n}(u) = \varphi_{X_1}(u)\cdots \varphi_{X_n}(u)\]
+    \begin{dimostrazione}
+        Dal punto 3. del Teorema \ref{th:12.4}, risulta evidente che:
+        \[\varphi_{X_1+\cdots+X_n}(u) = \varphi_{\ve{X}}(u, ..., u) = \varphi_{X_1}(u)\cdots \varphi_{X_n}(u)\]
+    \end{dimostrazione}
+\end{corollario}
+
+
+\begin{teorema}
+    Sia $\begin{bmatrix}X_1\\X_2\end{bmatrix}$ un vettore aleatorio in $\mathbb{R}^n$ con legge congiunta $P^{(X_1, X_2)}$. Si ponga $Y = X_1+X_2$, allora valgono le seguenti:
+    \begin{enumerate}
+        \item $P^Y$ su $\mathcal{B}$ è ben definita, infatti, $\forall B\in\mathcal{B}:$
+        \begin{align*}
+            P^Y(B) & = \mathbb{P}(Y\in B) = \E{\mathbb{I}_{Y\in B}} = \E{\mathbb{I}_B(Y)} = \E{\mathbb{I}_B(X_1+X_2)} = \E{h(X_1, X_2)} \\
+            & = \int_{\mathbb{R}^2} \mathbb{I}_B(X_1+X_2)\;dP^{(X_1, X_2)}(x_1, x_2) \\ 
+            & = \int_{\{(x_1, x_2):\, x_1+x_2\in B\}} dP^{(X_1, X_2)}(x_1, x_2)
+        \end{align*}
+        \item Se $\begin{bmatrix}X_1\\X_2\end{bmatrix}$ è assolutamente continuo $\quad \Rightarrow\quad Y \;$ è assolutamente continuo e vale che:
+        \[\boxed{f_Y(y) = \int_\mathbb{R} f_{(X_1, X_2)}(y-t, t)\;dt}\]
+        Inoltre, se $X_1\ind X_2$ allora:
+        \[\boxed{\int_\mathbb{R}f_{X_1}(y-t)f_{X_2}(y)\;dt =:(f_{X_1} * f_{X_2})(y)}\]
+        Il quale di definisce \textit{Prodotto di Convoluzione}
+        \item Se $\begin{bmatrix}X_1\\X_2\end{bmatrix}$ è discreto con densità congiunta $p_{(X_1, X_2)} \quad \Rightarrow\quad Y$ è discreto e vale che:
+        \[\boxed{p_{Y}(y) = \sum_{x_2\in S_{x_2}} p_{(X_1, X_2)}(y-x_2,  x_2)}\]
+        Inoltre, se $X_1\ind X_2$ allora:
+        \[\boxed{p_Y(y) = \sum_{x_2 \in S_{x_2}}p_{X_1}(y-x_2)p_{X_2}(x_2)}\]
+    \end{enumerate}
+\end{teorema}
+
+
+\section{Applicazioni Notevoli}
+Andiamo a vedere alcune applicazioni notevoli della funzione caratteristica.\\
+\\
+\(\bigstar \;\) Sia $X\sim G(p);\quad p_X(k) = (1-p)^{k-1}p$ con $k\geq1$. Ci chiediamo: \textit{quanto vale $\E{X}$?} Per definizione abbiamo che la funzione caratteristica risulta essere:
+\[\boxed{\varphi_X(u) = \sum_{k\geq1} e^{iux}(1-p)^{k-1}p = \frac{pe^{iu}}{1-e^{iu}(1-p)}}\]
+
+A questo punto, per il punto 1. del Teorema \ref{th:12.4} possiamo calcolare facilmente il valore atteso:
+\[\varphi_X'(u)\Big|_{u=0} = i\E{X} \quad \Rightarrow\quad \E{X} = \frac{1}{p}\]
+
+Grazie alla funzione caratteristica siamo riusciti a ricavare il valore atteso senza calcolare integrali, ma banalmente facendo una derivata.\\
+\\
+\(\bigstar \;\) Sia $X\sim \mathcal{N}(0, 1);\quad f_X(t) = \frac{1}{\sqrt{2\pi}}e^{\frac{-t^2}{2}}$ con $t\in\mathbb{R}$. \\
+Questa è la distribuzione Normale Standard, e si può dimostrare che $\E{|X|^m}<+\infty\;\;\forall m$. Ricaviamoci la funzione caratteristica:
+\begin{align*}
+    \sqrt{2\pi}\cdot \varphi_X(u) = \int_\mathbb{R} e^{iux} e^{\frac{-x^2}{2}}\;dx = \int_\mathbb{R} \cos(ux) e^{\frac{-x^2}{2}}\;dx + \cancelto{0}{i \int_\mathbb{R} \sin(ux) e^{\frac{-x^2}{2}}\;dx}
+\end{align*}
+Inoltre sappiamo che:
+\begin{align*}
+    \varphi_X'(u) & = i \E{Xe^{iuX}} = \frac{i}{\sqrt{2\pi}}\cancelto{0}{\int_\mathbb{R} x\cos(ux)e^{\frac{-x^2}{2}}\;dx} - \frac{1}{\sqrt{2\pi}}\int_\mathbb{R} x\sin(ux)e^{\frac{-x^2}{2}}\;dx\\
+    & = - \frac{1}{\sqrt{2\pi}} \left[-e^{\frac{x^2}{2}} \sin(ux)\Big|_{-\infty}^{+\infty} + \int_\mathbb{R}u\cdot \cos(ux)e^{\frac{-x^2}{2}}\;dx\right] = - \frac{u}{\sqrt{2\pi}}\int_\mathbb{R}\cos(ux)e^{\frac{-x^2}{2}}\;dx = -u \,\varphi_X(u)
+\end{align*}
+
+Abbiamo quindi che il calcolo della nostra funzione caratteristica si è trasformato in un problema di Cauchy, dove la condizione iniziale è dettata dal Teorema \ref{th:12.3}:
+\[\begin{cases}
+    \varphi_X'(u) = -u \varphi_X(u)\\
+    \varphi_X(0) = 0
+\end{cases}\qquad \Rightarrow \qquad \boxed{\varphi_X(u) = e^{-\frac{u^2}{2}}}\]
+
+A questo punto calcolare valore atteso e varianza diventa un gioco da ragazzi:
+\begin{align*}
+    \E{X} &= \frac{1}{i}\,\varphi'_X(0) = 0 \cdot \varphi_X(0) = 0\\
+    Var(X) &= \mathbb{E}[X^2] - \mathbb{E}^2[X] = -\varphi_X''(0) = \varphi_X(0) - 0^2 \cdot \varphi_X(0) = 1
+\end{align*}
+
+\noindent \(\bigstar \;\) Sia $X\sim\mathcal{N}(\mu, \sigma^2)$ con $\sigma^2>0$. Ossia ci siamo spostati nel caso generale di una variabile aleatoria gaussiana; quanto vale $\varphi_X(u)$? 
+
+\medskip
+\noindent Possiamo facilmente ricondurci al caso precedente, andando a standardizzare la variabile aleatoria:
+\[Z = \frac{X-\mu}{\sigma}\sim\mathcal{N}(0, 1)\quad \iff \quad X = \sigma Z + \mu\]
+Allora, grazie al punto 2. del Teorema \ref{th:12.4}, il calcolo diventa estremamente semplice:
+\[\boxed{\varphi_X(u) = e^{iu\mu}\varphi_Z(\sigma u) = e^{iu\mu} e^{-\frac{\sigma^2 u^2}{2}}}\]
+
+\noindent \(\bigstar \;\) \textit{Dato un vettore $\ve{X}, $ possiamo ricavare la funzione caratteristica delle sue componenti $\varphi_{X_k}(u_k)$, conoscendo solo $\varphi_{\ve{X}}(\ve{u})$?} 
+\label{pag:107}
+
+\medskip
+\noindent La risposta è sì. Per fare ciò, definiamo il vettore $\ve{v} = \begin{bmatrix} 0, ..., u_k, ..., 0\end{bmatrix}$, dove $u$ è in $k$--esima posizione. Allora il prodotto scalare $\scalar{v}{X} = \sum_{h=1}^n v_h X_h = u_k X_k$, e di conseguenza:
+\[\varphi_{\ve{X}}(\ve{v}) = \E{e^{i\scalar{v}{X}}} = \E{e^{iu_kX_k}} = \varphi_{X_k}(u_k)\quad \Rightarrow \quad \boxed{\varphi_{\ve{X}}(0, ..., u_k, ...0) = \varphi_{X_k}(u_k)}\]
+
+Abbiamo appena dimostrato che la funzione caratteristica multivariata $\varphi_{\ve{X}}(\ve{u})$, se valutata lungo una direzione che seleziona una sola componente $X_k$, coincide con la funzione caratteristica della variabile aleatoria scalare $X_k$.\\
+\\
+\(\bigstar \;\) Sia $\ve{X}$ un vettore aleatorio, e sia $\varphi_{\ve{X}}(\ve{u}), \;\ve{u}\in\mathbb{R}^n$ la sua funzione caratteristica. \textit{È possibile calcolare la funzione caratteristica $\; \varphi_{X_1+\cdots+X_n}(u)$ con $u\in\mathbb{R}\; $ della somma delle componenti di $\ve{X}$?}
+
+\medskip
+\noindent Anche in questo caso la risposta è sì:
+\[\varphi_{X_1+\cdots+X_n}(u) = \E{e^{iu\cdot(X_1+\cdots+X_n)}} = \E{e^{i(uX_1 + \cdots + uX_n)}} = \E{e^{i\scalar{s}{X}}} \quad \text{con }\ve{s} = (u, ..., u)\]
+\[\Rightarrow\qquad \boxed{\varphi_{X_1+\cdots+X_n}(u) = \varphi_{\ve{X}}(u, ..., u)}\]
+
+\noindent \(\bigstar \;\) Vogliamo andare a capire come si distribuiscono le somme di variabili aleatorie indipendenti e identicamente distribuite (i.i.d.):
+
+\begin{itemize}
+    \item Siano: $X_1\sim\mathcal{N}(\mu_1, \sigma^2_1) \ind X_2\sim\mathcal{N}(\mu_2, \sigma^2_2)$
+    \begin{align*}
+        \varphi_{X_1+X_2}(u) & = \varphi_{X_1}(u)\cdot \varphi_{X_2}(u) = e^{iu\mu_1} e^{-\frac{\sigma_1^2 u^2}{2}}\cdot e^{iu\mu_2} e^{-\frac{\sigma^2_2 u^2}{2}} = e^{iu(\mu_1+\mu_2)} e^{-\frac{(\sigma^2_1+\sigma_2^2) u^2}{2}}
+    \end{align*}
+    \[\boxed{X_1+X_2 \sim \mathcal{N}(\mu_1+\mu_2, \sigma^2_1+\sigma_2^2)}\]
+    
+    \item Siano: $X_1\sim Po(\lambda_1) \ind X_2\sim Po(\lambda_2)\quad $ con $\lambda_1, \lambda_2>0$
+    \[\varphi_{X_1+X_2}(u) = \varphi_{X_1}(u)\cdot \varphi_{X_2}(u) = e^{\lambda_1(e^{iu}-1)} e^{\lambda_2(e^{iu}-1)} = e^{(\lambda_1+\lambda_2)(e^{iu}-1)}\]
+    \[\boxed{X_1+X_2\sim Po(\lambda_1+\lambda_2)}\]
+
+    \item Siano date $X_1, ..., X_n\sim Be(p)$ famiglia di V.A. indipendenti:
+    \[\varphi_{X_n}(u) = \E{e^{iuX_n}} = e^{iu\cdot0} (1-p) + e^{iu\cdot 1}(1-p) = (1-p) + e^{iu}p\]
+    E di conseguenza:
+    \[\varphi_{X_1+\cdots + X_n}(u) = \varphi_{X_1}(u)\cdots \varphi_{X_n}(u) = \left[1-p+e^{iu}p\right]^n\]
+    \[\boxed{X_1+\cdots+X_n \sim Bin(n, p)}\]
+
+    \item Siano $X_1\sim Bin(n_1, p) \ind X_2\sim Bin(n_2, p)$
+    \[\varphi_{X_1+X_2}(u) = \varphi_{X_1}(u)\cdot \varphi_{X_2}(u) = \left(1-p+e^{iu}\right)^{n_1} \left(1-p+e^{iu}\right)^{n_2} = \left(1-p+e^{iu}\right)^{n_1+n_2}\]
+    \[\boxed{X_1+X_2\sim Bin(n_1+n_2, p)}\]
+\end{itemize}

@@ -1,0 +1,779 @@
+\chapter{Leggi Condizionali}
+\section{Introduzione Intuitiva}
+In questo capitolo riprenderemo il concetto di probabilità condizionata, motivandone in modo rigoroso l’esistenza e l’unicità, che in precedenza erano state assunte senza dimostrazione. Le definizioni già introdotte verranno riformulate nel linguaggio delle variabili aleatorie, abbandonando progressivamente quello puramente insiemistico, così da poter affrontare una trattazione più astratta e generale.
+
+\medskip
+Infine, attraverso l’analisi di casi particolari, mostreremo come i risultati ottenuti consentano di riconciliare e generalizzare le nozioni già incontrate di densità e probabilità condizionate, fornendo un quadro unificato e coerente.
+
+\bigskip
+\noindent Prendiamo in esempio il caso in cui $\begin{bmatrix}X\\Y\end{bmatrix}:(\Omega,\mathcal{A}, \mathbb{P})\to \mathbb{R}^2$ si discreto con densità discreta congiunta $p_{(X, Y)}$, marginali $p_X$ e $p_Y$ e con supporti $S_X, S_Y$. \\
+\\
+Supponiamo di venire a conoscenza del valore di $X=x$:
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[x=1cm,y=1cm,>=stealth,font=\small]
+\tikzset{
+  dotstyle/.style={black,fill=black,draw=none,circle,minimum size=2.2pt,inner sep=0pt},
+  tick/.style={black,thick},
+  highlight/.style={red,very thick}
+}
+% helper to draw one panel at (Xshift,0)
+\newcommand{\panel}[3]{% args: xshift, title, highlight code
+\begin{scope}[xshift=#1]
+  % axes
+  \draw[->,thick] (0,0) -- (3.6,0) node[below right] {$x$};
+  \draw[->,thick] (0,0) -- (0,2.6) node[left] {$y$};
+  % ticks + labels
+  \foreach \i/\lbl in {1/{$x_1$},2/{$x_2$},3/{$x_3$}}{
+    \draw[tick] (\i,0) -- ++(0,-0.06) node[below] {\lbl};
+  }
+  \foreach \j/\lbl in {1/{$y_1$},2/{$y_2$}}{
+    \draw[tick] (0,\j) -- ++(-0.06,0) node[left] {\lbl};
+  }
+  % grid of mass points
+  \foreach \i in {1,2,3}{
+    \foreach \j in {1,2}{
+      \node[dotstyle] at (\i,\j) {};
+    }
+  }
+  % title
+  \node[above=8pt] at (1.8,2.6) {#2};
+  % extra markings (e.g., red circles)
+  #3
+\end{scope}
+}
+
+% ------ three panels on one line ------
+% 1) Prima di osservare
+\panel{0cm}{\textcolor{red}{\strut Prima di osservare}}{}
+
+% 2) Dopo osservazione X = x_3
+\panel{5.2cm}{\textcolor{red}{\strut Dopo osservazione $X = x_3$}}{
+  \foreach \y in {1,2}{
+    \draw[highlight] (3,\y) circle [radius=0.16];
+  }
+}
+
+% 3) Dopo esperimento Y = y_2 (dato X = x_3)
+\panel{10.4cm}{\textcolor{red}{\strut Dopo esperimento $Y = y_2$}}{
+  \draw[highlight] (3,2) circle [radius=0.18];
+}
+\end{tikzpicture}
+\end{figure}
+
+Prima di osservare il valore di $X$ (primo grafico), abbiamo una probabilità che vive nello spazio $(\Omega,\mathcal{A}, \mathbb{P})$. Appena effettuata l'osservazione di $X$ (secondo grafico), cambia il nostro spazio di probabilità, infatti la probabilità vive su $\bigl(\Omega,\mathcal{A}, \mathbb{P}(\bullet \mid X=x)\bigr)$. È proprio su questo spazio che effettueremo tutta la nostra trattazione.
+
+\medskip L'ultimo grafico ci fa capire che, a seguito dell'esperimento e quindi della ``lettura'' di $Y$, non abbiamo più uno spazio di probabilità, ma siamo certi di ciò che è accaduto.
+
+\bigskip
+\noindent Ora che abbiamo compreso ``dove'' si svolgeranno nostre analisi, possiamo andare a fare delle considerazioni su quello che già sappiamo. Tenendo in mente che queste valgono $\forall x\in S_X$. 
+
+\bigskip
+\noindent \(\bigstar \;\) La mappa $\;B\mapsto\mathbb{P}(B\mid X=x)\;$ definita su $\;\mathcal{B}\to [0, 1]\;$ è una probabilità. Questo era già stato visto nella Proposizione \ref{prop:mappa_condizionata}.
+
+\bigskip
+\noindent \(\bigstar \;\) Possiamo vedere che
+\[\mathbb{P}(Y\in S_Y\mid X=x) = \frac{\mathbb{P}(Y\in S_Y\cap X=x)}{\mathbb{P}(X=x)} = \frac{\mathbb{P}(\Omega \cap X=x)}{\mathbb{P}(X=x)} = 1\]
+Quindi $Y$ continua a ad essere una variabile aleatoria discreta anche sul nuovo spazio di probabilità. $Y$ avrà quindi una legge diversa da $P^Y$, che è chiamata \textit{legge di $Y$ condizionata ad $X=x$}, definita come:
+\[P^{Y\mid X}(B \mid x) = \mathbb{P}(Y\in B\mid X=x)\qquad \forall B\in \mathcal{B}\]
+e avrà densità definita come
+\[p_{Y\mid X}(y\mid x) = \mathbb{P}(Y=y\mid X=x) = \frac{\mathbb{P}(Y=y, X=x)}{\mathbb{P}(X=x)} = \frac{p_{(X, Y)}(x, y)}{p_X(x)}\qquad  x\in S_X, y\in S_Y\]
+\begin{equation}
+    \label{eq:14.1}
+    \Rightarrow\qquad \boxed{p_{Y\mid X}(y\mid x) = \frac{p_{(X, Y)}(x, y)}{p_X(x)} }
+\end{equation}
+Siccome, in questo caso, è una densità discreta, allora varranno le condizioni:
+\[\begin{cases}
+    & p_{Y\mid X}(y\mid x) \geq 0\\
+    & \sum_{y\in S_Y} p_{Y\mid X} (y\mid x) = 1 
+\end{cases}\qquad \forall x \in S_x\]
+
+\bigskip
+\noindent \(\bigstar \;\) Se si conosce $P^{Y\mid X}(\bullet \mid x)$, allora (nell'ipotesi che $h$ sia una funzione limitata) :
+\[\E{h(y)\mid X=x} = \sum_{y\in S_Y} h(y)\cdot p_{Y\mid X}(y\mid x)\]
+
+Questo ci permette di definire, tutte le volte che ha senso\footnote{Ossia quando $\begin{cases}
+    Y\geq 0\\
+    \sum |y| p_{Y\mid X}(y\mid x) < +\infty
+\end{cases}$}, il \textit{valore atteso condizionato di $Y$ dato $X=x$}:
+\[\E{Y\mid X=x} = \sum_{y\in S_Y} y \;p_{Y\mid X}(y\mid x)\]
+
+\bigskip
+\noindent \(\bigstar \;\) Grazie all'equazione \ref{eq:14.1}, se la si moltiplica per $p_X(x)$ si ottiene
+\[p_X(x)\cdot p_{Y\mid X}(y\mid x) = p_{(X, Y)}(x, y)\]
+\noindent Ovvero che possiamo conoscere solo il lato sinistro dell'equazione per conoscere la densità congiunta del vettore. 
+
+\medskip
+\noindent Possiamo quindi trovare la legge congiunta del vettore attraverso la densità condizionata, infatti $\;\forall A\times B \in \mathcal{B}\times\mathcal{B}$
+\begin{align*}
+    P^{(X, Y)}(A\times B)&  = \sum_{x\in A\cap S_X} \sum_{y\in B\cap S_Y} p_{(X, Y)}(x, y) = \sum_{x\in A\cap S_X} \sum_{y\in B\cap S_Y} p_X(x)\cdot p_{Y\mid X}(y\mid x)\\
+    & = \sum_{x\in A\cap S_X}\left(\sum_{y\in B\cap S_Y}p_{Y\mid X(y\mid x)}\right) p_X(x) && \textit{\small$p_X(x)$ costante in $y$}
+\end{align*}
+
+\noindent Ricavando così la \textit{relazione fondamentale}:
+\[\boxed{P^{(X, Y)}(A\times B) = \sum_{x\in S_X}\mathbb{I}_{A}(x)P^{Y}(B\mid X=x)\cdot p_X(x)}\]
+Che ovviamente può essere scritto anche come integrale di Lebesgue:
+\[P^{(X, Y)} = \int_\mathbb{R}\mathbb{I}_A(x) P^Y(B\mid X=x) dP^X(x) = \int_\mathbb{R} \left(\mathbb{I}_A(x)\int_\mathbb{R} \mathbb{I}_B(y) dP^{Y\mid X}(dy\mid x)\right)dP^X(x)\]
+
+\bigskip
+\noindent Vediamo un esempio per cercare di capire come utilizzare ciò che abbiamo appena visto.
+\begin{esempio}
+\label{es:leggi_cond}
+    Si lancia un dado, e successivamente si lancia una moneta tante volte quanto è il numero uscito sul dado. Siano
+    \[D = \text{Risultato del dado}\qquad T = \text{numero di teste osservate}\]
+    Vogliamo trovare quale si la legge di $T$.
+
+    \medskip
+    \noindent $D,T$ sono variabili aleatorie discrete tali che $T\in\{1, ...6\}, \; D\in \{\, ..., 6\}$. Inoltre conosciamo la densità della variabile $D$:
+    \[p_D(k) = \frac{1}{6}\qquad \forall k=\, ..., 6 \]
+    Inoltre:
+    \[\mathbb{P}(T=h\mid D=k) = \binom{k}{h}\frac{1}{2^k}\quad h=0, ..., k \qquad \Rightarrow\qquad p_{T\mid D}(h\mid k) = \binom{k}{h}\frac{1}{2^k} \sim Bin\left(k, \frac{1}{2}\right)\]
+    Possiamo ottenerci la densità congiunta del vettore:
+    \[p_{(T, D)} = p_D(k)\cdot p_{T\mid D}(h\mid k) = \frac{1}{6} \binom{k}{h}\frac{1}{2^k}\qquad \text{con: }\;\begin{aligned}1\leq k\leq 6\\ 0\leq h\leq k\end{aligned}\]
+
+    \noindent Possiamo quindi ottenere $p_T$ semplicemente facendo:
+    \[p_T(h) = \sum_{k=h}^6 \frac{1}{6} \binom{k}{h}\frac{1}{2^k}\]
+\end{esempio}
+
+\bigskip
+\noindent Abbiamo trattato fino ad ora variabili aleatorie discrete, e si potrebbe estendere le nozioni a variabili aleatorie qualsiasi: $Y:\Omega\to\mathbb{R}^n$. 
+
+\medskip
+Tuttavia, con la trattazione appena eseguita, risulta un problema ``togliere la discretezza'' della variabile, perché per una variabile aleatoria continua si ha che $\mathbb{P}(X=x) = 0$.
+
+\medskip
+\noindent Volendo rendere il problema più concreto, si pensi al vettore aleatorio $\begin{bmatrix}
+    X\\Y
+\end{bmatrix} = \begin{bmatrix}
+    \text{Altezza}\\
+    \text{Peso}
+\end{bmatrix}$ che descrive altezza e peso della popolazione italiana, che sono due variabili continue. Si ha ad esempio che $\mathbb{P}(X=185) = 0$, ma nella realtà è un valore misurabile. Stiamo quindi cercando di dare valore ad oggetti del tipo:
+\[\mathbb{P}(Y>70\mid X=185) = \;?\]
+
+\section{Trattazione Formale}
+\noindent Ora che abbiamo compreso la natura del problema, e abbiamo trattato (in maniera non formale) il caso specifico delle discrete, diamo le definizioni formali.\\
+\\
+\faWarning $\;$ Una precisazione: nei capitoli precedenti si è usata la notazione vettoriale (es. $\ve{X}$) per raffigurare i vettori. D'ora in avanti questa non verrà più usata per non rendere la scrittura troppo pesante: qualsiasi variabile aleatoria che incontreremo dovrà essere intesa come un vettore, a meno che non sia esplicito il viceversa.
+
+\begin{definizione}
+\label{def:legge_cond}
+    Sia $(\Omega, \mathcal{A}, \mathbb{P})$ uno spazio di probabilità, e siano dati i vettori aleatori $\;X:(\Omega, \mathcal{A}, \mathbb{P})\to (E, \mathcal{E})\;$ e $Y:(\Omega, \mathcal{A}, \mathbb{P})\to (\mathbb{R}^n, \mathcal{B}^n)$. Si chiama \textit{legge condizionale di $Y$ dato $X=x$}, la funzione:
+    \[P^{Y\mid X}(\bullet\mid\bullet): \mathcal{B}^n\longrightarrow[0, 1]\]
+
+    tale che:
+    \begin{enumerate}
+        \item $\forall B\in\mathcal{B}^n\;$ fissato, la mappa
+        \begin{align*}
+            x &\longrightarrow P^{Y\mid X}(B\mid x)\\
+            E &\longmapsto[0, 1]
+        \end{align*}
+        è misurabile rispetto ad $\mathcal{E}$
+        
+        \item $\forall x\in E$ fissato, la mappa 
+        \begin{align*}
+            B &\longrightarrow P^{Y\mid X}(B\mid x)\\
+            \mathcal{B}^n &\longmapsto[0, 1]
+        \end{align*}
+        è una misura di probabilità su $\mathcal{B}^n$
+        
+        \item Vale la \textit{Relazione Fondamentale}:
+        \[\boxed{P^{(X, Y)} (A\times B)= \int_E\mathbb{I}_A(x) P^{Y\mid X}(B\mid x)\; dP^X(x) = \int_E\mathbb{I}_A(x)\left(\int_{\mathbb{R} ^n}\mathbb{I}_B(y)\; dP^{Y\mid X}(dy\mid x)\right)\;dP^X(x)}\]
+    \end{enumerate}
+\end{definizione}
+Tipicamente avremo che $E = \mathbb{R}^k, \;\mathcal{E} = \mathcal{B}^k$.
+
+\medskip
+\noindent Si tenga conto che è valido il \textit{Teorema di disintegrazione della misura}, che noi non vedremo, che assicura che $\;\exists ! P^{Y\mid X}\;$ tutte le volte che $Y$ è  un vettore in $\mathbb{R}^n$.
+
+\bigskip
+\noindent La relazione fondamentale può essere vista come una generalizzazione al caso continuo della formula delle probabilità totali. Affinché questa abbia senso sono necessarie le condizioni 1. e 2. della definizione.
+
+\bigskip
+\noindent Inoltre, sempre dalla relazione fondamentale, si può dedurre il seguente fatto:
+
+\medskip
+\noindent $\forall h>0 \;\text{ oppure limitata}:$
+
+\[\boxed{\E{h(X, Y)} = \int_{E\times \mathbb{R}^n}h(x, y)\; dP^{(X, Y)}(x, y) = \int_E \left(\int_{\mathbb{R}^n}h(x, y)\;dP^{Y\mid X}(y\mid x)\right)\;dP^X(x)}\]
+
+Questo può essere visto come una generalizzazione del teorema di Fubini--Tonelli, in quanto ne estende l’idea fondamentale ma in un contesto molto più astratto, dove la misura integrata non è un prodotto, bensì una disintegrazione.
+
+\medskip
+Nel caso classico, l'integrale viene decomposto come iterato grazie alla struttura della misura prodotto. Qui, invece, la misura congiunta $P^{(X,Y)}$ non è in generale un prodotto,
+ma può essere \emph{disintegrata} rispetto alla marginale $P^X$, 
+tramite la famiglia di misure condizionate $P^{Y\mid X}(\,\bullet\mid x)$.
+La formula permette quindi di esprimere l'aspettazione di una funzione di $(X,Y)$ come un integrale iterato rispetto a tali misure condizionate.\\
+\\
+Vediamo allora di legare la probabilità congiunta con la probabilità condizionata in alcuni casi di particolare rilevanza.
+
+\subsection{Caso di Indipendenza}
+\label{cap:14.2.1}
+Se siamo nel caso in cui due variabili aleatorie sono indipendenti:
+\[\boxed{X\ind Y\quad \iff \quad P^{Y\mid X}(dy\mid x) = P^Y(dy)}\;\text{ q.c. rispetto a }\;P^X\]
+Questa scrittura ci riporta indietro ad una proprietà che avevamo già visto: una variabile aleatoria è indipendente da un’altra se e solo se la sua legge rimane identica dopo il condizionamento.
+
+\subsection{Caso Deterministico}
+Nel caso in cui si abbia un legame deterministico tra $X$ ed $Y$, ossia che si può esprimere $Y=h(X), $ con $h:E = \mathbb{R}^k\to\mathbb{R}^n$ Boreliana. Allora se $X = x$, implica che $Y=h(x)$, ovvero:
+\[\mathbb{P}(Y\in B\mid X=x) = \mathbb{P}\bigr(h(x) \in B\bigl) = \begin{cases}
+    1, \quad &\text{ se } h(x)\in B\\
+    0, \quad &\text{ se } h(x)\notin B
+\end{cases}\qquad \Rightarrow \qquad \boxed{P^{Y\mid X}(B\mid x) = \delta_{h(x)}(B)}\]
+
+Abbiamo quindi una legge ``candidata'' ad essere la legge condizionale; per determinare che sia realmente questa, c'è bisogno che siano rispettate tutte le condizioni 1. 2. e 3. della Definizione \ref{def:legge_cond}.
+
+\medskip
+\noindent La condizione 1. è vera, in quanto $\forall B\in\mathcal{B}\;$ fissato, si ha che la funzione
+\begin{equation}P^{Y\mid X}(B\mid x) = \mathbb{I}_{B}\bigl(h(x)\bigr) = \begin{cases}
+    1, \quad &\text{ se } h(x)\in B\\
+    0, \quad &\text{ se } h(x)\notin B
+\label{eq:14.2}
+\end{cases}\end{equation}
+
+e quindi $h$ è boreliana e $\mathbb{I}$ è una funzione misurabile.
+
+\medskip
+\noindent Il punto 2. è vero per costruzione, in quanto $\delta$ è una misura di probabilità.
+
+\medskip
+\noindent Rimane solo da verificare che sia valida la relazione fondamentale:
+\begin{align*}
+    P^{(X, Y)}(A\times B) & = \E{\mathbb{I}_A(X)\cdot \mathbb{I}_B(Y)} = \E{\mathbb{I}_A(X)\cdot \mathbb{I}_B\bigl(h(X)\bigr)} \\
+    & = \int_E \mathbb{I}_A(x)\cdot \mathbb{I}_B\bigl(h(x)\bigr) \;dP^X \overset{\text{eq. }\eqref{eq:14.2}}{=} \int_E \mathbb{I}_A(x)P^{Y\mid X}(B\mid x)\;dP^X\\
+    & = \int_E\mathbb{I}_A(x)\left(\int_{\mathbb{R}^n}\mathbb{I}_B(y)\cdot \delta_{h(x)}(dy)\right)\; dP^X && \checkmark
+\end{align*}
+Siccome valgono tutte le condizioni, possiamo dire di aver trovato la legge condizionale nel caso in cui le variabili aleatorie abbiano una relazione deterministica.
+
+\subsection{Caso Discreto}
+
+Siano i due vettori aleatori $X\in \mathbb{R}^k, Y\in\mathbb{R}^n$, e si costruisca il vettore discreto $[X, Y]^\top \in \mathbb{R}^{k+n}$. Siccome $X$ è discreto, allora anche $S_X$ è discreto, e possiamo definire la legge condizionale come:
+\[\boxed{
+P^{Y\mid X}(B\mid x)=\begin{cases}
+    \mathbb{P}(Y\in B\mid X=x)\quad &\text{se }x\in S_X\\
+    \mathbb{Q}(B) \quad &\text{se }x\in S_X^c
+\end{cases}}\]
+Dove $\mathbb{Q}$ è una qualsiasi misura di probabilità su $\mathcal{B}^n$.
+
+\bigskip
+\noindent Come prima, affinché si possa dire che $P^{Y\mid X}$ sia la legge condizionale, deve verificare tutte e tre le condizioni della Definizione \ref{def:legge_cond}.
+
+\medskip
+\noindent La 1. è verificata in quanto, variando $x$, è misurabile per costruzione. Il punto 2. è verificato a sua volta in quanto, variando $B$, sia nel caso in cui $x\in S_X$, che nel caso in cui $x\in S_X^c$, si ha che $P^{Y\mid X}$ è una misura di probabilità.
+
+\medskip
+\noindent Non ci rimane altro che verificare la 3. Si presti attenzione che faremo una catena di uguaglianze ``a salire'' dalla definizione:
+\begin{align*}
+    & \int_{\mathbb{R}^k}\mathbb{I}_A(x)\left(\int_{\mathbb{R} ^n}\mathbb{I}_B(y)\; dP^{Y\mid X}(dy\mid x)\right)\;dP^X(x) = \int_{\mathbb{R}^k}\mathbb{I}_A(x) P^{Y\mid X}(B\mid x) dP^X(x) \\
+    & = \int_{S_X} \mathbb{I}_A(x) P^{Y\mid X}(B\mid x) dP^X(x) + \underbrace{\int_{\mathbb{R}^k\setminus S_X} \underbrace{\mathbb{I}_A(x)\mathbb{Q}(B)}_{P^X\text{--q.c. nulla}}dP^X(x)}_0 \\
+    & = \sum_{x\in S_X \cap A} \mathbb{P}(Y\in B\mid X=x)p_X(x) + 0\\
+    & = \mathbb{P}(Y\in B,  X\in A) = P^{(X, Y)}(A\times B) && \checkmark
+\end{align*}
+
+\noindent Siccome valgono tutte le condizioni, abbiamo che $\forall x \in S_X$ la legge condizionale $P^{Y\mid X}(\bullet \mid x)$ è una misura di probabilità discreta su $\mathcal{B}^n$, con densità discreta:
+\[p_{Y\mid X}(y\mid x) = \frac{p_{(X, Y)}(x, y)}{p_X(x)}\qquad \forall y\in S_Y\]
+Inoltre, $\forall h\geq 0$ oppure limitata:
+\[\E{h(Y)\mid X=x} = \sum_{y\in S_Y}h(y)\cdot p_{Y\mid X}(y\mid x)\]
+
+\subsection{Caso Continuo}
+Si consideri il vettore $[X, Y]^\top$ assolutamente continuo, con densità congiunta $f_{(X, Y)}$ e marginali $f_X, f_Y$. Possiamo definire il supporto di $X$ come: \(\;S_X = \{t\in \mathbb{R}^k\;:\;f_X(t)>0\}\). Si presti particolare attenzione che nella definizione di $S_X$ si intende $f_X$ come il rappresentante delle classi di equivalenza di [$f_X$]: stiamo quindi considerando una vera e propria funzione fissata. 
+
+\medskip
+\noindent Possiamo definire la densità condizionale di $Y$ dato $X=x$ come:
+\[\boxed{f_{Y\mid X}(y\mid x) = \begin{cases}
+    \frac{f_{(X, Y)}(x, y)}{f_X(x)} \quad &\text{se } x\in S_X\\
+    \tilde{f}(y) & \text{se } x\in S_X^c
+\end{cases}}\qquad \text{dove}\qquad \begin{cases}
+    \tilde{f}(y) \geq 0\\
+    \int_\mathbb{R}\tilde{f}(y)dy = 1
+\end{cases}\]
+Si noti che, se si fissa $y$, $\tilde{f}(y)$ risulta essere una costante in $x$. Si può inoltre dimostrare (e noi non lo faremo) che $f_{Y\mid X}$ risulta essere misurabile e quindi una densità di probabilità su $\mathbb{R}^n$. Allora possiamo definire la legge condizionale:
+\[P^{Y\mid X}(B\mid x) = \int_{\mathbb{R}^n} \mathbb{I}_B(y) f_{Y\mid X}(y\mid x)\;dy = \int_B f_{Y\mid X}(y\mid x)\;dy \]
+
+\noindent La condizione 1. risulta essere vera in quanto, se fisso $B\in \mathcal{B}^n$, la mappa $x \longrightarrow P^{Y\mid X}(B\mid x)$ è misurabile:
+\[P^{Y\mid X}(B\mid x) = \underbrace{\int_B \mathbb{I}_{S_X}(x)\frac{f_{(X, Y)}(x, y)}{f_X(x)}\;dy}_{\text{misurabile}} + \underbrace{\int_B\mathbb{I}_{S_X^c}(x)\tilde{f}(y)\;dy}_{\text{misurabile}}\]
+
+\noindent La condizione 2. risulta verificata per costruzione. Dimostriamo che vale la relazione fondamentale:
+\begin{align*}
+    \int_{\mathbb{R}^k} \mathbb{I}_A(x) P^{Y\mid X}(B\mid x) dP^X(x) & = \int_{S_X} \mathbb{I}_A(x) P^{Y\mid X}(B\mid x) f_X(x)\;dx \\
+    & = \int_{S_X} \mathbb{I}_A(x) \left(\int_B\frac{f_{(X, Y)}(x, y)}{\cancel{f_X(x)}}\;dy\right) \cancel{f_X(x)}\;dx \\
+    & = \int_{S_X} \mathbb{I}_A(x) \left(\int_{\mathbb{R}^n}\mathbb{I}_B(y)f_{(X, Y)}(x, y)\;dy \right)\;dx\\
+  \textit{\small(Per Fubini--Tonelli)}\qquad  & = \int_{\mathbb{R}^k}\int_{\mathbb{R}^n} \mathbb{I}_{A\cap S_X}(x) \mathbb{I}_B(y)f_{(X, Y)}(x, y)\;dxdy\\
+  & = \int_{\mathbb{R}^k\times \mathbb{R}^n} \mathbb{I}_{A\cap S_X\times B}(x, y) f_{(X, Y)}(x, y)\;dxdy \\
+  & = P^{(X, Y)}(A\cap S_X \times B) \\
+  & = \mathbb{P}(X\in A\cap S_X, Y\in B)\\
+  \small\textit{$(X\in A\cap S_X) = (X\in A)\cap \underbrace{(X\in S_X)}_\Omega = X\in A$}\qquad & = \mathbb{P}(X\in A, Y\in B) \\
+  & = P^{(X, Y)}(A\times B) &&\checkmark
+\end{align*}
+
+\noindent E inoltre, $\forall x\in S_x, \forall h\geq 0$ o limitata:
+\[\E{h(Y)\mid X=x} = \int_{\mathbb{R}^n} h(y)f_{Y\mid X}(y\mid x)\;dy = \int_{\mathbb{R}^n} h(,y) \frac{f_{(X, Y)}(x, y)}{f_X(x)}\;dy\]
+
+\begin{proposizione}
+    Sia $[X, Y]^\top$ un vettore aleatorio su $\mathbb{R}^k\times \mathbb{R}^n$ tale che $X$ sia un vettore assolutamente continuo con densità $\;f_X$, e $\;P^{Y\mid X}(\bullet\mid x)\;\;\forall x\in S_X\;$ sia una probabilità assolutamente continua, ossia che:
+    \[\exists f_{Y\mid X}(y\mid x)\;\text{ densità tale che: }\quad P^{Y\mid X}(B\mid x) = \int_B f_{Y\mid X}(y\mid x)\;dy\qquad \forall B\in\mathcal{B}^n\]
+    \(\Rightarrow\qquad \begin{bmatrix}X\\Y\end{bmatrix} \quad\) è assolutamente continuo, con densità:
+    \[f_{(X, Y)} (x, y) = \begin{cases}
+        f_{Y\mid X}(y\mid x)\cdot f_X(x) \qquad &\text{se: }x\in S_X\\
+        0 &\text{se: } x\in S_X^c
+    \end{cases}\]
+\end{proposizione}
+
+\subsection{Caso Gaussiano}
+È evidente che il gaso gaussiano è una casistica particolare del caso continuo , ma lo trattiamo separatamente per la sua rilevanza pratica.
+
+\medskip 
+\noindent Tratteremo prima il caso bidimensionale in cui si abbiamo due variabili aleatorie unidimensionali (caso specifico con $k=n=1$), per poi affrontare il caso generico vettoriale.
+
+\bigskip
+\noindent Si considerino le variabili aleatorie unidimensionali $X, Y$, e si formi il vettore aleatorio gaussiano:
+\[\begin{bmatrix}X\\Y\end{bmatrix} \sim \mathcal{N}\left(\begin{bmatrix}\mu_X\\\mu_Y\end{bmatrix}, \begin{bmatrix}\sigma_X^2 & \rho\sigma_X\sigma_Y\\ \rho\sigma_X\sigma_Y& \sigma_Y^2\end{bmatrix}\right)\]
+
+\noindent Ci chiediamo, \textit{quale è $P^{Y\mid X}$?} Notiamo che abbiamo due casi:
+\begin{itemize}
+    \item Se $\sigma_X^2 = 0$, allora $X = \mu_X$ quasi certamente, e di conseguenza $X\ind Y$. Allora, per la trattazione svolta nel capitolo \ref{cap:14.2.1} avremo che:\[P^{Y\mid X} = P^Y\sim \mathcal{N}(\mu_Y, \sigma_Y^2)\]
+    \item Se $\sigma_X^2 > 0$ la trattazione è leggermente più complicata, e viene affrontata con la prossima proposizione.
+\end{itemize}
+
+\begin{proposizione}
+    Sia il vettore gaussiano $\;\begin{bmatrix}X\\Y\end{bmatrix} \sim \mathcal{N}\left(\begin{bmatrix}\mu_X\\\mu_Y\end{bmatrix}, \begin{bmatrix}\sigma_X^2 & \rho\sigma_X\sigma_Y\\ \rho\sigma_X\sigma_Y& \sigma_Y^2\end{bmatrix}\right)\;$, con $\sigma_X^2>0$, allora:
+    \[\boxed{P^{Y\mid X}(dy\mid x)\sim\mathcal{N}\bigl(m(x), q^2\bigr)}\qquad \forall x\in\mathbb{R}\]
+    Dove:
+\begin{align*}
+    & m(x) = \E{Y\mid X=x} = \mu_Y + \frac{Cov(X, Y)}{\sigma_X^2}(x-\mu_X) = \mu_Y + \rho \cdot \frac{\sigma_Y}{\sigma_X}(x-\mu_X) \\
+    & q^2 = Var(Y\mid X=x) = \int_\mathbb{R}\bigl(y- m(x)\bigr)^2 \;dP^{Y\mid X}(dy\mid x) = \sigma_Y^2(1-\rho^2)
+\end{align*}
+\end{proposizione}
+
+Facciamo alcune osservazioni:
+\begin{itemize}
+    \item Si denota $y=m(x)$ con \textit{retta di regressione}
+    \item Possiamo notare che $q^2$ non dipende dall'osservazione $X=x$
+    \item $\rho = 0\quad \iff \quad X\ind Y\;$ e $\;P^{Y\mid X}(dy\mid x) \sim \mathcal{N}(\mu_Y, \sigma_Y^2)$
+    \item Si hanno due casi in cui $\;q^2=0$:
+    \begin{itemize}
+        \item $|\rho| = 1 \quad \Rightarrow \quad P^{Y\mid X}(dy\mid x)\sim \delta_{m(x)}$
+        \item $\sigma_Y^2 = 0\quad \Rightarrow \quad Y \sim \delta_{\mu_Y} \quad \Rightarrow \quad X\ind Y \quad \Rightarrow \quad P^{Y\mid X}(dy\mid x)\sim \delta_{\mu_Y}$
+    \end{itemize}
+\end{itemize}
+
+\bigskip
+\noindent Come anticipato, possiamo generalizzare il tutto al \textbf{caso vettoriale} in cui si abbiano due vettori gaussiani: $X\sim\mathcal{N}(\mu_X, C_X)$ $k$--dimensionale e $Y\sim\mathcal{N}(\mu_Y, C_Y)$ $n$--dimensionale. Allora vale la seguente proposizione:
+\begin{proposizione}[Caso Vettoriale]
+    Siano $X\sim\mathcal{N}(\mu_X, C_X)$ $k$--dimensionale e $Y\sim\mathcal{N}(\mu_Y, C_Y)$ $n$--dimensionale. Si costruisca il vettore
+    \[\begin{bmatrix}X\\Y\end{bmatrix} \sim \mathcal{N}\left(\begin{bmatrix}\mu_X\\\mu_Y\end{bmatrix}, \begin{bmatrix}C_X & C_{XY}\\ C_{YX}& C_Y\end{bmatrix}\right)\qquad \text{con} \qquad \begin{bmatrix}X\\Y\end{bmatrix}\in \mathbb{R}^{k}\times \mathbb{R}^n\]
+    Dove $C_{XY} = \E{(X-\mu_X)(Y-\mu_Y)^\top} = C_{YX}^\top$.
+
+    \bigskip
+    \noindent Se $\det(C_X)>0$ ossia che che $C_X$ è invertibile $\quad \Rightarrow\quad \boxed{P^{Y\mid X}(dy\mid x)\sim \mathcal{N}(m(x), Q)}$\\
+    Dove:
+    \begin{align*}
+        & m(x) = \E{Y\mid X=x} = \mu_Y + C_{YX}C_X(x-\mu_x)\\
+        & Q = Var(Y\mid X = x) = C_Y - C_{YX}C^{-1}_XC_{XY}
+    \end{align*}
+\end{proposizione}
+
+\section{Attesa Condizionata}
+
+Nel capitolo precedente è stato introdotto il valore atteso condizionato alla conoscenza di un determinato valore assunto da un'altra variabile. Il passo che affrontiamo ora consiste nel generalizzare tale concetto: invece di fissare un valore specifico della variabile condizionante, trasformeremo il valore atteso condizionato in una nuova variabile aleatoria, detta \textbf{attesa condizionata}, che dipende dal valore -- questa volta non noto a priori -- assunto dalla variabile condizionante.
+
+\medskip
+L’attesa condizionata costituisce uno strumento estremamente potente: gode di numerose proprietà e trova applicazione in contesti molto diversi, dal calcolo di valori attesi e varianze complesse all’approssimazione di variabili aleatorie sulla base di informazioni parziali.
+
+\bigskip
+\noindent Dalla teoria precedente abbiamo visto che, dato uno spazio di probabilità $(\Omega, \mathcal{A}, \mathbb{P})$ e le variabili aleatorie $X:(\Omega, \mathcal{A}, \mathbb{P})\to(\mathbb{R}^k, \mathcal{B}^k)$ e $Y:(\Omega, \mathcal{A}, \mathbb{P})\to(\mathbb{R}, \mathcal{B})$ limitata, ossia tale che $|Y(w)|\leq M\;\;\forall w\in \Omega$
+
+\medskip
+
+$\Rightarrow \quad \exists P^{Y\mid X}(dy\mid x)$ e, se $X=x$, possiamo calcolare l'attesa come:
+\[\E{Y\mid X=x} = \int_{\mathbb{R}}y\;dP^{Y\mid X}(dy\mid x)=:m(x)\]
+dove \(m : \mathbb{R}^k \to \mathbb{R}\) è una funzione ben definita per ogni valore \(x\).  
+Per ottenere da \(m(x)\) una variabile aleatoria, è sufficiente valutare tale funzione nei valori che la variabile aleatoria $X$ può effettivamente assumere; in altre parole, si considera la composizione $m(X)$.
+
+\bigskip 
+\noindent Formalizziamo la definizione.
+
+\begin{definizione}
+\label{def:E_cond}
+    Il valore atteso (o media) condizionata di $Y$ dato $X$ è la variabile aleatoria $E:(\Omega, \mathcal{A})\to (\mathbb{R}, \mathcal{B})$
+    \[\E{Y\mid X} = m(X)\qquad \text{ovvero}\qquad \E{Y\mid X}(w) = m(X(w))\quad \forall w\in\Omega\]
+\end{definizione}
+
+\begin{esempio}
+\label{es:continuo}
+    Riprendiamo l'esempio già esposto a pagina \pageref{es:leggi_cond}. Avevamo già calcolato che 
+    \[P^{T\mid D}(\bullet\mid d) \sim Bin\left(d, \frac{1}{2}\right)\]
+    \textit{Allora quanto vale $\E{T\mid D}$?}
+    \[\E{T\mid D=d} = \frac{d}{2} = m(d)\quad \Rightarrow\quad \E{T\mid D} = m(D) = \frac{D}{2}\]
+\end{esempio}
+
+\bigskip
+\noindent Per la trattazione che andremo a fare, si consiglia di avere fresco il concetto di $\sigma$--algebra generata da una variabile aleatoria $X$, precedentemente esposto a pagina \pageref{sigma(X)}.
+\begin{esempio}
+    Facciamo un esempio per rinfrescare la memoria. Si consideri l'esperimento dove si lanciano due dadi e se ne voglia valutare la somma. Avremo che:
+    \[\Omega= \{1, ..., 6\}^2, \qquad \mathcal{A} = 2^\Omega, \qquad X\bigl((h, k)\bigr) = h+k\]
+    Allora avremo che: $\quad \sigma(X) = \set{(X=2), (X=4), ..., (X=12)}\subsetneq 2^\Omega$.
+
+    \medskip
+    Intuitivamente (come già avevamo visto) è normale che $\sigma(X)\subset\mathcal{A}$, in quanto l'informazione che conosco da $X$ è sicuramente minore dell'informazione dei due risultati del singolo lancio. Per esempio, se $X=3$, non so se è uscito $(1, 2)$ oppure $(2, 1)$. Infatti $\{(1, 2)\}\notin \sigma(X)$, ma $\{(1, 2)\}\in 2^\Omega$.
+\end{esempio}
+
+
+\begin{definizione}
+    Se $(Z\in B)\in \sigma(X)\;\forall B\in\mathcal{B}\;\Rightarrow\;Z:(\Omega, \mathcal{A})\to (\mathbb{R}, \mathcal{B})$ è $\sigma(X)$--misurabile,
+\end{definizione}
+
+Tornando all'esempio appena fatto, se $Z=$\textit{risultato del primo lancio}, allora $Z$ non è $\sigma(X)$--misurabile; ma una qualsiasi funzione deterministica di $X$ lo è. È proprio su questo che si basa il lemma successivo:
+
+\begin{lemma}[Lemma di Doob]
+    Sia $(\Omega, \mathcal{A}, \mathbb{P})$ uno spazio di probabilità e $(E, \mathcal{E})$ uno spazio misurabile. Siano inoltre $X:(\Omega, \mathcal{A})\to(E, \mathcal{E})$ e $Y:(\Omega, \mathcal{A})\to(\mathbb{R}, \mathcal{B})$ due variabili aleatorie, allora:
+
+    \[Y \;\text{ è }\; \sigma(X)\text{--misurabile}\qquad \iff\qquad \exists \,h:E\to\mathbb{R}\;\text{ misurabile tale che }\; Y=h(X)\]
+\end{lemma}
+\noindent Grazie a questo lemma possiamo affermare che, siccome $\E{Y\mid X} = m(X)$
+\[\Rightarrow \quad \E{Y\mid X} \text{ è }\; \sigma(X)\text{--misurabile}\]
+
+\begin{proposizione}
+    Sia $(\Omega, \mathcal{A}, \mathbb{P})$ uno spazio di probabilità, e siano le variabili aleatorie $X:(\Omega, \mathcal{A})\to(\mathbb{R}^k, \mathcal{B}^k)$ e $Y:(\Omega, \mathcal{A})\to(\mathbb{R}, \mathcal{B})$ con $|Y|\leq M$ quasi certamente. 
+    
+    \medskip
+    \noindent Allora la variabile aleatoria $Z=\E{Y\mid X}$ è l'unica V.A. reale $\sigma(X)$-- misurabile tale che:
+    \begin{equation}
+    \tag{\(\blacktriangle\)}
+    \label{eq:14.8}
+        \forall G\in \sigma(X):\qquad \int_G Y\;d\mathbb{P} = \int_G Z\;d\mathbb{P} = \int_G \E{Y\mid X} \;d\mathbb{P} 
+    \end{equation}
+    Oppure, scrivendola in modo diverso:
+    \[\forall G\in \sigma(X):\qquad \E{\mathbb{I}_G Y} = \E{\mathbb{I}_G Z} = \E{\mathbb{I}_G \E{Y\mid X}}\]
+    Dove $G=(X\in B), \;B\in\mathcal{B}^k$.
+    \begin{dimostrazione}
+        Definiamo $\E{Y\mid X} = :Z = m(X), $  dove:
+        \[m(x) = \int_{\mathbb{R}}y\;dP^{Y\mid X}(dy\mid x)\quad \forall x\in\mathbb{R}^k\]
+        Allora:
+        \begin{align*}
+            \E{\mathbb{I}_G\E{Y\mid X}} & = \E{\mathbb{I}_{X\in B}m(X)} = \E{\mathbb{I}_B(X) m(X)} \\
+           \textit{\small (Per la regola del valore atteso)}\qquad & = \int_\mathbb{R}\mathbb{I}_B(x)\left(\int_\mathbb{R}y\;P^{Y\mid X}(dy\mid x)\right)\;dP^X(x) \\
+           \textit{\small (F--T Generalizzato )}\qquad  & = \int_{\mathbb{R}\times \mathbb{R}} \mathbb{I}_B(x) y  \;dP^{(X, Y)} = \\
+           & = \E{\mathbb{I}_G Y}
+        \end{align*}
+    \end{dimostrazione}
+\end{proposizione}
+
+\noindent Facciamo delle osservazioni:
+
+\bigskip
+\noindent \(\bigstar\;\) Se $\Omega\in\sigma(X)$, allora necessariamente si ha che \eqref{eq:14.8} diventa:
+
+\[\E{\mathbb{I}_\Omega} Y = \E{\mathbb{I}_\Omega Z} = \E{\mathbb{I}_\Omega \E{Y\mid X}}\qquad \Rightarrow\qquad \boxed{\E{Y} = \E{\E{Y\mid X}}}\]
+\begin{esempio}
+\label{es:continuo2}
+    Nell'esempio ripreso a pagina \pageref{es:continuo}:
+    \[\E{T} = \E{\E{T\mid D}} = \E{\frac{D}{2}} = \frac{1}{2}\E{D} = \frac{7}{4}\]
+\end{esempio}
+
+\bigskip
+\noindent \(\bigstar\; \E{Y\mid X}\) dipende da $Y$ e da $\sigma(X)$, ``non tanto da $X$''. \\
+Per esempio:
+\[\sigma\left(X^3\right) = \sigma(X)\quad \Rightarrow\quad \E{Y\mid X^3} = \E{Y\mid X}\]
+Questo perchè $\left(X^3\in [a, b]\right) = \left(X\in[\sqrt[3]{a}, \sqrt[3]{b}]\right)$. 
+
+\bigskip
+\noindent In generale possiamo dedurre che: se $h$ è misurabile ed invertibile, con inversa misurabile, allora vale che:
+\[\boxed{\sigma(h(X)) = \sigma(X) \quad \Rightarrow \quad \E{Y\mid h(X)} = \E{Y}\mid X}\]
+Per questo motivo spesso si usa la notazione $\E{Y\mid\sigma(X)}$ per indicare $\E{Y\mid X}$
+
+\bigskip
+\noindent \(\bigstar\) Se $Y\geq 0$ quasi certamente, allora anche $Z = \E{Y\mid X}\geq0$ quasi certamente. Inoltre, come già avevamo osservato, vale la relazione $\E{Y} = \E{\E{Y\mid X}}$. Questo implica che, se $Y\in L^1\quad \Rightarrow\quad Z\in L^1$.
+
+\begin{definizione}[Estensione della Definizione di Attesa Condizionata (\ref{def:E_cond})]
+\label{def:E_cond2}
+    Sia $\mathcal{G}\subseteq \mathcal{A}$ una sotto $\sigma$--algebra. Siano $(\Omega, \mathcal{A}, \mathbb{P})$ uno spazio di probabilità, e $Y:(\Omega, \mathcal{A})\to (\mathbb{R}, \mathcal{B})$ tale che $Y\in L^1$.
+
+    \medskip
+    \noindent Allora l'attesa condizionale di $Y$ dato $\mathcal{G},\; \E{Y\mid \mathcal{G}}$, è l'unica variabile aleatoria $Z$ tale che:
+    \begin{enumerate}
+        \item $Z\in L^1(\Omega, \mathcal{A}, \mathbb{P})$
+        \item $Z\;$ è $\;\mathcal{G}$--misurabile
+        \item Vale la relazione \eqref{eq:14.8}: $\qquad \E{\mathbb{I}_G Y} = \E{\mathbb{I}_G Z}\quad \forall G\in\mathcal{G}$.
+    \end{enumerate}
+\end{definizione}
+
+\noindent Due Considerazioni molto importanti a riguardo:
+
+\bigskip
+\noindent \(\bigstar\) La Definizione \ref{def:E_cond} fornisce una definizione dell’attesa condizionata nel caso particolare in cui la $\sigma$-algebra rispetto alla quale stiamo condizionando è
+del tipo $\sigma(X)$, dove $X$ è una variabile aleatoria. In questo caso è 
+possibile definire esplicitamente una \emph{legge condizionale} di $Y$ dato $X$ che permette di costruire in modo concreto la quantità
+\[
+\mathbb{E}[Y\mid X](\omega)
+  = \int_{\mathbb{R}} y \, P^{Y\mid X}(dy \mid X(\omega)).
+\]
+Questa descrizione è quindi \emph{costruttiva} e dipende dall’esistenza della 
+legge condizionale $P^{Y\mid X}$.
+
+\medskip
+\noindent Tuttavia, questa costruzione funziona solo quando la $\sigma$-algebra
+rispetto alla quale si condiziona è effettivamente generata da una singola
+variabile aleatoria. Nella pratica le $\sigma$-algebre rispetto alle quali si condiziona \emph{non} sono
+necessariamente di questo tipo.
+\medskip
+
+\noindent In generale, per una $\sigma$-algebra qualunque $\mathcal{G}\subseteq \mathcal{A}$, \emph{non esiste alcuna} variabile aleatoria $X$ tale che $\mathcal{G}=\sigma(X)$, e quindi \emph{non è possibile} definire una legge condizionale $P^{Y\mid X}$.
+
+\medskip
+
+\noindent Per questi motivi, la Definizione 4.9 introduce una definizione \emph{astratta} e completamente generale di attesa condizionale.
+
+\medskip
+
+\noindent \textbf{Questa definizione non richiede alcuna legge condizionale e vale sempre}, per qualsiasi $\sigma$-algebra $\mathcal{G}$.
+
+\bigskip
+\noindent \(\bigstar\) $Z = \E{Y\mid \mathcal{G}}\in L^1\;$ è una classe di equivalenza: se $\tilde{Z}$ verifica le condizioni della Definizione \ref{def:E_cond2} $\quad \Rightarrow\quad \tilde{Z} = Z$ quasi certamente.
+
+\medskip
+Quindi, formalmente parlando, $\E{Z\mid \mathcal{G}}$ non è una VA in senso stretto, bensì una classe di equivalenza di tutte le VA che sono ad essa uguali quasi certamente. Ma questo non causa particolari problemi in quanto leggi, valori attesi, etc. sono invarianti di una classe di equivalenza di variabili aleatorie.
+
+\begin{esempio}
+    Si consideri $X\sim \mathcal{N}(0, \sigma^2)$. Quanto vale $\E{X\mid X^2} = \E{X\mid \sigma(X^2)}$?
+
+    \medskip
+    \noindent Siccome la legge congiunta $P^{(X, X^2)}$ è piuttosto complicata (in qunto il vettore non è congiuntamente continuo), allora anche la legge $P^{X\mid X^2}$ sarà complicata.
+    
+    \medskip
+    \noindent Per questo motivo usiamo la Definizione \ref{def:E_cond2}: vogliamo ipotizzare un valore per l'attesa condizionata, e se questo soddisfa tutte le condizioni della definizione, allora è unico.
+
+    \medskip
+    Si consideri un $G\in \sigma(X^2)$, per l'equazione \eqref{eq:14.8} si ha che: $\E{\mathbb{I}_G X} = \E{\mathbb{I}_G \E{X\mid\sigma(X^2)}}$. Per definizione si ha che $G\in \sigma(X^2) \iff G = (X^2\in B)$. Allora:
+    \begin{align*}
+        \E{\mathbb{I}_{(X^2\in B)}X} = E[\underbrace{\overbrace{\mathbb{I}_B(X^2)}^{\text{pari}}\cdot X}_{\text{dispari}}] = 0
+    \end{align*}
+
+    Per simmetria dell'equazione \eqref{eq:14.8}, allora dovremo avere che $\;\E{X\mid \sigma(X^2)} = 0$ quasi certamente. Non abbiamo ancora finito: per ora abbiamo solo ipotizzato che l'attesa condizionale sia zero. Siccome questa rispetta anche le condizioni 1. e 2. della definizione, possiamo affermare con certezza (ed unicità) che 
+    \[\E{X\mid \sigma(X^2)} = 0\quad\text{q.c.}\]
+\end{esempio}
+
+\bigskip
+\noindent Andiamo ad elencare in maniera riassuntiva tutte le proprietà dell'attesa condizionale.
+\begin{teorema}[Proprietà dell'Attesa Condizionale]
+\label{th:prop_E_cond}
+    Sia $Y:\Omega\to\mathbb{R}$ una variabile aleatoria tale che $Y\in L^1$, e sia $\mathcal{G}\subseteq\mathcal{A}$ sotto $\sigma$--algebra.
+    \medskip
+    \noindent Allora valgono le seguenti proprietà:
+    \begin{enumerate}[start=0]
+        \item $\exists\; \E{Y\mid \mathcal{G}}\;$ nel senso della Definizione \ref{def:E_cond2}
+        
+        \item La mappa $\Gamma : L^1(\Omega,\mathcal{A},\mathbb{P}) \to L^1(\Omega,\mathcal{G},\mathbb{P})\;$ tale che $\;Y \mapsto \E{Y \mid \mathcal{G}}\;$ è lineare e positiva, ossia:
+        \begin{itemize}
+            \item $\E{a Y_1 + b Y_2\mid \mathcal{G}} =a\E{Y_1\mid \mathcal{G}} + b\E{Y_2\mid \mathcal{G}}$
+            \item $Y\geq 0 \;\text{q.c}\quad \Rightarrow\quad \E{Y\mid \mathcal{G}}\geq 0\;\text{q.c}$
+        \end{itemize}
+
+        \item $\E{\E{Y\mid \mathcal{G}}}= \E{Y}$
+
+        \item Se $Y$ è $\mathcal{G}$--misurabile $\quad \Rightarrow\quad \E{Y\mid X} = Y$ q.c.
+
+        \item Se $\;\sigma(Y)\ind \mathcal{G} \quad \Rightarrow\quad \E{Y\mid X} = \E{Y}$ q.c.
+
+        \item Date $\mathcal{H}\subseteq\mathcal{G}\subseteq\mathcal{A}$ due sotto $\sigma$--algebre $ \quad \Rightarrow\quad \E{Y\mid \mathcal{H}} = \E{\E{Y\mid\mathcal{G}}\mid \mathcal{H}}$ q.c.
+
+        \item Data $W$ V.A. $\mathcal{G}$--misurabile tale che $W\cdot Y\in L^1\quad \Rightarrow\quad \E{W\cdot Y\mid \mathcal{G}} = W\cdot \E{Y\mid \mathcal{G}}$ q.c.
+
+        \item Se $Y = \tilde{Y}$ q.c. $\quad \Rightarrow\quad \E{\tilde{Y}\mid \mathcal{G}} = \E{Y\mid \mathcal{G}}$ q.c.
+
+        \item Vale il teorema di Convergenza Monotona:\\
+        Sia $Y_n\geq 0$ tale che $Y_n\uparrow Y$ q.c. $\quad \Rightarrow\quad \E{Y_n\mid \mathcal{G}}\uparrow \E{Y\mid \mathcal{G}}$ q.c. 
+
+        \item Vale il teorema di Convergenza Dominata:\\
+        Sia $Y_n$ t.c. $Y_n\to Y$ q.c. e $|Y_n|\leq V$ q.c. con $V\in L^1\quad \Rightarrow\quad Y_n\in L^1\;$ e $\; \E{Y_n\mid \mathcal{G}}\to \E{Y\mid \mathcal{G}}$ q.c.
+
+        \item $Y\in L^p \quad \Rightarrow\quad \E{Y\mid \mathcal{G}}\in L^p\quad \forall p\qquad$ e $\qquad \bigl\|\E{Y\mid \mathcal{G}}\bigr\|_{L^p} \leq \left\|Y\right\|_{L^p}$
+
+        \item Data $h:\mathbb{R}\to \mathbb{R}$ boreliana t.c. $\;h(Y)\in L^1\;$ e $\; \mathcal{G} = \sigma(X)$, ipotizzando di conoscere $P^{Y\mid X}(dy\mid x)$, allora
+        \[\E{h(Y)\mid \sigma(X)} = \E{h(Y)\mid X} =:n(X)\]
+        Dove:
+        \[n:\mathbb{R}\to\mathbb{R}\quad ;\quad n(x) = \int_\mathbb{R}h(y)\;dP^{Y\mid X}(dy\mid x)\]
+        Ossia che le Definizioni \ref{def:E_cond} e \ref{def:E_cond2} sono consistenti l'una con l'altra.
+    \end{enumerate}
+\end{teorema}
+
+Se consideriamo la $\sigma$--algebra banale $\mathcal{G} = \{\varnothing, \Omega\}$ e $Y\in L^1$ una variabile aleatoria definita sullo spazio di probabilità $(\Omega, \mathcal{A},\mathbb{P})$, allora, per il punto 4. del teorema appena illustrato, possiamo affermare che:
+\[\E{Y\mid \mathcal{G}} = \E{Y}\]
+Questo perché si ha che $\mathcal{G}\ind \sigma(Y)$. Da un punto modellistico si può intuire che conoscere $\mathcal{G}$ non da alcuna informazione aggiuntiva su $Y$.
+
+\bigskip
+\noindent Le proprietà appena illustrate valgono (con le dovute modifiche) anche nel caso vettoriale. Ossia quanto $Y:\Omega\to \mathbb{R}^n$ tale che $Y_k\in L^1(\Omega, \mathcal{A},\mathbb{P})\;\forall k = 1, ..., n$, e $\mathcal{G}\subseteq\mathcal{A}$ sotto $\sigma$--algebra. Allora possiamo costruire il vettore:
+
+\[\E{Y\mid \mathcal{G}} = \begin{bmatrix}\E{Y_1\mid \mathcal{G}}\\ \vdots\\ \E{Y_n\mid \mathcal{G}}\end{bmatrix}\]
+
+\subsection{Attesa Condizionata in $L^2$ e Ottimizzazione}
+Affrontiamo il caso specifico in cui ci troviamo nello spazio $L^2$. Si abbia uno spazio di probabilità $(\Omega, \mathcal{A},\mathbb{P}), \; \mathcal{G}\subseteq\mathcal{A}$ sotto $\sigma$--algebra.
+
+\begin{proposizione}
+\label{prop:14.11}
+    Sia $(\Omega, \mathcal{A},\mathbb{P})$ uno spazio di probabilità e $\mathcal{G}\subseteq\mathcal{A}$ sotto $\sigma$--algebra.
+
+    \medskip
+    \noindent
+    Allora:
+    \[\boxed{\E{(Y-\E{Y\mid \mathcal{G}})^2} = \min_{Z\in L^2(\mathcal{G})} \E{(Y-Z)^2}}\]
+\end{proposizione}
+
+Grazie a questa proposizione, possiamo vedere $\E{Y\mid \mathcal{G}}$ come la proiezione di $Y$ su $L^2(\Omega, \mathcal{G},\mathbb{P})$. Questo è possibile perché $L^2(\Omega, \mathcal{A},\mathbb{P})$ non solo è uno spazio vettoriale, ma è anche uno spazio di Hilbert\footnote{Senza entrare nel dettaglio: uno spazio di Hilbert è uno spazio vettoriale dotato di prodotto scalare $\langle \bullet,\bullet \rangle$, e completo rispetto alla norma indotta da questo.}. Possiamo quindi avere la nozione di prodotto scalare, e quindi di proiezione. 
+\begin{figure}[H]
+\centering
+
+% angoli per la visualizzazione 3D
+\tdplotsetmaincoords{65}{150}
+
+\begin{tikzpicture}[tdplot_main_coords, scale=1.65]
+
+    % Assi
+    \draw[->, thick] (0,0,0) -- (3,0,0) node[below right] {$x$};
+    \draw[->, thick] (0,0,0) -- (0,3,0) node[left] {$y$};
+    \draw[->, thick] (0,0,0) -- (0,0,2) node[left] {$z$};
+
+    % Piano L2(G)
+    \coordinate (A) at (0,0,0);
+    \coordinate (B) at (2.5,0.7,0);
+    \coordinate (C) at (2.7,2.0,0);
+    \coordinate (D) at (0.2,2.5,0);
+
+    % riempimento del piano
+    \fill[blue!10] (A)--(B)--(C)--(D)--cycle;
+    \draw[thick] (A)--(B)--(C)--(D)--cycle;
+    \node[blue!70] at (2,1.3,0) {$L^2(\mathcal G)$};
+
+    % punto Y (sopra il piano)
+    \coordinate (Y) at (1.4,1.1,2.0);
+    \draw[->, thick] (0,0,0) -- (Y) node[above right] {$Y$};
+
+    % proiezione E[Y|G] sul piano
+    \coordinate (Pg) at (1.4,1.1,0);
+    \draw[->, thick, red] (0,0,0) -- (Pg)
+        node[right=5pt] {$\E{Y\mid\mathcal G}$};
+
+    % tratteggio verticale della proiezione
+    \draw[dashed] (Y) -- (Pg);
+
+    % angolo retto
+    \draw ($(Pg)+(0.12,0,0)$) -- ++(0,0,0.12) -- ++(-0.12,0,0);
+
+    % spazio grande
+    \node[gray] at (3.3,2.5,3) {$L^2(\mathcal A)$};
+
+\end{tikzpicture}
+\end{figure}
+
+Per comprendere a pieno la figura, si immagini $L^2(\mathcal{A})$ come tutto lo spazio tridimensionale; in questo modo $L^2(\mathcal{G})\subset L^2(\mathcal{A})$. Come si vede $Y$ vive nello spazio $L^2(\mathcal{A})$, mentre la sua proiezione $\E{Y\mid \mathcal{G}}$ vive nel sottospazio $L^2(\mathcal{G})$.
+
+\medskip
+\noindent Allora, per un certo $W\in L^2(\Omega, \mathcal{G},\mathbb{P})$ si avrà che:
+\begin{align*}
+    \left\langle W, Y - \E{Y\mid \mathcal{G}} \right\rangle_{L^2(\mathcal{G})} = 0 \quad &\Rightarrow\quad \left\langle W, Y\right\rangle_{L^2} = \left\langle W, \E{Y\mid \mathcal{G}} \right\rangle_{L^2}\\
+    &\Rightarrow\quad \E{W\cdot Y} = \E{W\cdot \E{Y\mid \mathcal{G}}} \qquad \forall W\in L^2(\Omega, \mathcal{G},\mathbb{P})
+\end{align*}
+
+\noindent Se prendiamo $W = \mathbb{I}_G$ otteniamo esattamente la condizione \eqref{eq:14.8}: $\qquad \E{\mathbb{I}_G Y} = \E{\mathbb{I}_G Z}\quad \forall G\in \mathcal{G}$. \\
+Questo dimostra che $\E{Y\mid G}$ soddisfa la definizione di attesa condizionata, e che questa è la proiezione ortogonale nel senso di Hilbert $Y$ su $L^2(\mathcal{G})$.
+
+\section{Varianza Condizionata}
+Estendendo concettualmente i ragionamenti fatti per l'attesa condizionata, possiamo andare a identificare una Varianza Condizionata. È noto che, dato $Y\in L^2$, allora $Var(Y) = \E{(Y-\E{Y})^2}.$ Ipotizzando di sapere la legge condizionale $P^{Y\mid X}(dy\mid x)$, possiamo ricavare la varianza condizionata di $Y$ dato $X=x$ come:
+\[q^2(x) := Var(Y\mid X=x) = \E{\bigl(Y-\E{Y\mid X=x}\bigr)^2\mid X=x} = \int_\mathbb{R}\bigl(y-m(x)\bigr)^2\;dP^{Y\mid X}(dy\mid x)\]
+
+\noindent Dove:\(\quad m(x) = \int_\mathbb{R}y\;dP^{Y\mid X}(dy\mid x)\).
+
+\medskip
+\noindent Come abbiamo fatto per l'attesa condizionata, affinché questa sia una variabile aleatoria è sufficiente valutare tale funzione nei valori che la variabile aleatoria $X$ può effettivamente assumere. La definizione diventa allora:
+
+\[q^2(X) = \E{\bigl(Y-\E{Y\mid X}\bigr)^2\mid X}\]
+
+\bigskip
+\noindent Diamo quindi la definizione formale ed astratta, anche nel caso in cui $Y$ sia condizionata da una generica $\sigma$--algebra, e non per forza da una variabile aleatoria.
+
+\begin{definizione}
+    Sia $Y\in L^2(\Omega, \mathcal{A}, \mathbb{P})$, e $\mathcal{G}\subseteq \mathcal{A}$ una sotto $\sigma$--algebra. Definiamo la Varianza Condizionata di $Y$ dato $\mathcal{G}$, la variabile aleatoria data da:
+    \[Var(Y\mid\mathcal{G}) = \E{\bigl(Y-\E{Y\mid \mathcal{G}}\bigr)^2 \;\big|\; \mathcal{G}}\]
+\end{definizione}
+
+\noindent Osserviamo immediatamente che $Var(Y\mid \mathcal{G})$ è una variabile aleatoria reale, in quanto:
+
+\[Y\in L^2 \quad \Rightarrow\quad \E{Y\mid \mathcal{G}}\in L^2 \quad \Rightarrow\quad \left(Y - \E{Y\mid \mathcal{G}}\right)\in L^2 \quad \Rightarrow\quad \left(Y - \E{Y\mid \mathcal{G}}\right)^2\in L^1\]
+\[\Rightarrow\quad \E{\left(Y - \E{Y\mid \mathcal{G}}\right)^2\mid \mathcal{G}}\in L^1\]
+
+\begin{teorema}[Proprietà della Varianza Condizionata]
+    Dato $Y\in L^2(\Omega, \mathcal{A}, \mathbb{P})$, e $\mathcal{G}\subseteq \mathcal{A}$ una sotto $\sigma$--algebra, allora valgono le seguenti:
+    \begin{enumerate}
+        \item $Var(Y\mid \mathcal{G})\geq 0$ q.c. $\hfill$\textit{(Mappa positiva)}
+        \item $Var(Y\mid \mathcal{G}) = \E{Y^2\mid \mathcal{G}} - \left(\E{Y\mid \mathcal{G}}\right)^2$
+        \item $\E{Var(Y\mid \mathcal{G})} = \E{\left(Y-\E{Y\mid \mathcal{G}}\right)^2}$
+        \item Se $\;\mathcal{G} = \sigma(X) \quad \Rightarrow\quad Var(Y\mid \sigma(X)) = Var(Y\mid X) = q^2(X)$
+        \item Vale la \textit{formula di scomposizione della Varianza}:
+        \[\boxed{Var(Y) = Var\left(\E{Y\mid \mathcal{G}}\right) + \E{Var(Y\mid \mathcal{G})}}\]
+    \end{enumerate}
+
+    \begin{dimostrazione}
+        1. Deriva primo punto dal Teorema \ref{th:prop_E_cond}, ossia che $\Gamma$ è una mappa positiva.
+
+        \bigskip
+        \noindent 2. Introduciamo $\widehat{Y} := \E{Y\mid \mathcal{G}}, \;$ che è $\mathcal{G}$--misurabile. Allora avremo che:
+        \begin{align*}
+            Var(Y\mid \mathcal{G}) & = \E{\bigl(Y-\E{Y\mid \mathcal{G}}\bigr)^2 \;\big|\; \mathcal{G}} = \E{(Y-\widehat{Y})^2\mid \mathcal{G}} = \E{Y^2-2Y\widehat{Y}+\widehat{Y}^2\mid \mathcal{G}} \\
+            & \overset{\text{\ref{th:prop_E_cond}.6}}{=} \E{Y^2\mid\mathcal{G}} - 2 \widehat{Y} \E{Y\mid\mathcal{G}} + \E{\widehat{Y}\mid\mathcal{G}} \\
+            \textit{\small($\widehat{Y}^2\;\mathcal{G}$--misurabile)} \quad & = \E{Y^2\mid\mathcal{G}} - 2 \widehat{Y} \cdot \widehat{Y} + \widehat{Y}^2 \\
+            & = \E{Y^2\mid\mathcal{G}} -  \widehat{Y}^2 \\
+            & = \E{Y^2\mid\mathcal{G}} -  \left(\E{Y\mid \mathcal{G}}\right)^2
+        \end{align*}
+
+        \bigskip
+        \noindent 3. Si ricava direttamente dal secondo punto del Teorema \ref{th:prop_E_cond}, mentre il punto 4. è triviale
+
+        \bigskip
+        \noindent 5. Definiamo anche in questo caso $\;\widehat{Y} := \E{Y\mid \mathcal{G}}$. Dalla definizione di varianza:
+        \begin{align*}
+            Var(Y) & = \E{\left(Y-\E{Y}\right)^2} = \E{\left(Y-\E{Y}\right)^2 + \widehat{Y} - \widehat{Y}} = \E{\left(\bigl(Y-\widehat{Y}\bigr) + \bigl(\widehat{Y} - \E{Y}\bigr)\right)^2} \\
+            & = \underbrace{\E{\left(Y-\widehat{Y}\right)^2}}_A + \underbrace{\E{\left(\widehat{Y} - \E{Y}\right)^2}}_B + 2 \underbrace{\E{\left(Y-\widehat{Y}\right) \left(\widehat{Y} - \E{Y}\right)}}_C \\
+            \\
+            & A:\; \E{(Y - \E{Y\mid\mathcal{G}})^2} = \E{\E{Y - \E{Y\mid\mathcal{G}})^2}\mid\mathcal{G}} = \E{Var(Y\mid \mathcal{G})}\\
+            & \begin{aligned}
+                B: \; & \E{\left(\widehat{Y} - \E{Y}\right)^2} = \E{\E{\left(\widehat{Y} - \E{\widehat{Y}}\right)^2}}\quad \textit{\small Siccome \ref{th:prop_E_cond}.2:  $\E{Y} = \E{\E{Y\mid \mathcal{G}}}$}\\
+                & =  Var(\widehat{Y}) = Var(\E{Y\mid \mathcal{G}})
+            \end{aligned} \\
+            & \begin{aligned}
+                C:\; & \E{\left(Y-\widehat{Y}\right) \left(\widehat{Y} - \E{Y}\right)} \overset{\text{\ref{th:prop_E_cond}.2}}{=} E\Bigl[E\bigl[(Y-\widehat{Y}) \underbrace{(\widehat{Y} - \E{Y})}_{\mathcal{G}\text{--misurabile}}\mid\mathcal{G}\bigr]\Bigr]\\
+                & = \E{(\widehat{Y} - \E{Y})\cdot \underbrace{E\Bigl[Y -\E{Y\mid \mathcal{G}}\mid \mathcal{G}\Bigr]}_{*}}\\
+                & \qquad\quad  \text{\small $\text{Dove: }\; * = \E{Y\mid\mathcal{G}} - \E{\E{Y\mid \mathcal{G}}\mid \mathcal{G}} = \E{Y\mid\mathcal{G}} - \E{Y\mid\mathcal{G}} = 0 \; \text{ q.c.}$}\\
+                & = 0 \;\text{q.c. }
+            \end{aligned}\\
+            \\
+            \Rightarrow Var(Y) & = A+B = \E{Var(Y\mid\mathcal{G})} + Var(\E{Y\mid\mathcal{G}})
+        \end{align*}
+    \end{dimostrazione}
+\end{teorema}
+
+Dal punto 5. del teorema si può ricavare che $Var(Y)\geq Var(\E{Y\mid \mathcal{G}})$. Questo, da un punto di vista modellistico, è ragionevole: nel momento in cui abbiamo informazioni maggiori (quindi conosciamo $\mathcal{G}$) avremo una varianza minore rispetto a non avere nessuna informazione. 
+
+\medskip
+Ragionando allo stesso modo, sempre dal punto 5., ricaviamo che:
+\[Var(Y) = \E{(Y-\E{Y})^2} \geq \E{Var(Y\mid \mathcal{G})} \overset{\text{3.}}{=} \E{(Y-\E{Y\mid \mathcal{G}})^2}\]
+\[\Rightarrow\quad \E{(Y-\E{Y})^2} \geq \E{(Y-\E{Y\mid \mathcal{G}})^2}\]
+
+Questo è proprio dovuto al fatto che (come avevamo visto nella Proposizione \ref{prop:14.11}) la proiezione ortogonale di $Y \in L^{2}(\Omega,\mathcal A,\mathbb P)$ su $L^{2}(\mathcal G)$ è precisamente l’attesa condizionata $\E{Y\mid\mathcal G}$. Ciò significa che $\E{Y\mid\mathcal G}$ è l’elemento di $L^{2}(\mathcal G)$ \emph{più vicino} a $Y$ in norma $L^{2}$. 
+
+\medskip
+In altre parole, $\E{Y}$ è un elemento di $L^{2}(\mathcal G)$ (in quanto si può vedere come una V.A. costante), ma non è in generale la proiezione ortogonale di $Y$ su $L^{2}(\mathcal G)$, e quindi non sarà la variabile che la approssima meglio.
+\begin{esempio}
+    Continuiamo l'esempio che avevamo ripreso a pagina \pageref{es:continuo2}. Per la formula di scomposizione della varianza abbiamo che:
+    \[Var(T) = \E{Var(T\mid D)} + Var(\E{T\mid D})\]
+    Siccome avevamo già calcolato in precedenza che $\E{T\mid D} = D/2$, e che $Var(T\mid D) \overset{Bin}{=}D/4$. Allora:
+    \[Var(T) = \frac{1}{4}\E{D} + \frac{1}{4}Var(D) = \frac{77}{48}\simeq 1.6042\]
+\end{esempio}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,150 @@
+\section{Poisson}
+Chiamata anche legge degli eventi rari, descrive la distribuzione del numero di eventi che si verificano in modo indipendente all’interno di un dato intervallo di tempo (o spazio), assumendo che il numero medio di eventi sia pari a $\lambda > 0$. Essa può essere ottenuta come limite in legge di una successione di distribuzioni binomiali $Bin(n,p)$ quando $n\to +\infty, p\to0$ e $\lambda = np$ rimane costante.
+\[
+Po(\lambda)
+\]
+
+\begin{figure}[H]
+\centering
+
+\begin{minipage}{0.45\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$\mathbb{P}(X=k)$},
+    xlabel = {$k$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 0.28,
+    xmin = -1, xmax = 26,
+    legend style={at={(axis cs: 2,0.27)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- Poisson(lambda=4) ---
+\addplot[
+    only marks,
+    black,
+    mark=*,
+    mark options={fill=black, scale=0.7}
+]
+coordinates {
+(0,0.018316)(1,0.073263)(2,0.146525)(3,0.195367)(4,0.195367)
+(5,0.156293)(6,0.104196)(7,0.059540)(8,0.029770)(9,0.013231)
+(10,0.005292)(11,0.001925)(12,0.000642)(13,0.000197)(14,0.000056)
+(15,0.000015)(16,0.000004)(17,0.000001)(18,0.000000)(19,0.000000)
+(20,0.000000)
+};
+
+% --- Poisson(lambda=10) ---
+\addplot[
+    only marks,
+    gray!60,
+    mark=*,
+    mark options={fill=gray!60, scale=0.7}
+]
+coordinates {
+(0,0.000045)(1,0.000454)(2,0.002270)(3,0.007567)(4,0.018917)
+(5,0.037833)(6,0.063055)(7,0.090079)(8,0.112599)(9,0.125110)
+(10,0.125110)(11,0.113737)(12,0.094781)(13,0.072909)(14,0.052078)
+(15,0.034719)(16,0.021700)(17,0.012765)(18,0.007092)(19,0.003732)
+(20,0.001866)
+};
+
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$F(k)$},
+    xlabel = {$k$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 1.1,
+    xmin = -1, xmax = 26,
+    legend style={at={(axis cs: 20,0.25)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- CDF Poisson(lambda=4) ---
+\addplot[
+    jump mark left,
+    black,
+    mark=*,
+    mark options={fill=black, scale=0.7}
+]
+coordinates{
+(0,0.018316)(1,0.091579)(2,0.238104)(3,0.433471)(4,0.628838)
+(5,0.785131)(6,0.889327)(7,0.948867)(8,0.978637)(9,0.991868)
+(10,0.997160)(11,0.999085)(12,0.999727)(13,0.999924)(14,0.999980)
+(15,0.999995)(16,0.999999)(17,1.000000)(18,1.000000)(19,1.000000)
+(20,1.000000)
+};
+\addlegendentry{$\lambda=4$}
+
+% --- CDF Poisson(lambda=10) ---
+\addplot[
+    jump mark left,
+    gray!60,
+    mark=*,
+    mark options={fill=gray!60, scale=0.7}
+]
+coordinates{
+(0,0.000045)(1,0.000499)(2,0.002769)(3,0.010336)(4,0.029253)
+(5,0.067086)(6,0.130141)(7,0.220220)(8,0.332819)(9,0.457929)
+(10,0.583039)(11,0.696776)(12,0.791557)(13,0.864466)(14,0.916544)
+(15,0.951263)(16,0.972963)(17,0.985728)(18,0.992820)(19,0.996552)
+(20,0.998418)
+};
+\addlegendentry{$\lambda=10$}
+
+\end{axis}
+\end{tikzpicture}
+
+\end{minipage}
+
+\end{figure}
+
+\bigskip
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Supporto} 
+& $\{0,1,2,\dots\}\subset\mathbb{Z}$ \\
+
+\midrule
+
+\textbf{Funzione di Densità} 
+& $\mathbb{P}(X=k)=e^{-\lambda}\dfrac{\lambda^k}{k!}$,\quad $k=0,1,2,\dots$ \\
+
+\midrule
+
+\textbf{Funzione di Ripartizione}
+& $F(k)=\mathbb{P}(X\le k)=\displaystyle\sum_{j=0}^{\lfloor k\rfloor}e^{-\lambda}\dfrac{\lambda^j}{j!}$ \\
+
+\midrule
+
+\textbf{Valore atteso} 
+& $\mathbb{E}[X]=\lambda$ \\
+
+\midrule
+
+\textbf{Varianza}
+& $Var(X)=\lambda$ \\
+
+\midrule
+
+\textbf{Funzione caratteristica}
+& $\varphi_X(u)=\exp\!\bigl(\lambda(e^{iu}-1)\bigr)$ \\
+
+\bottomrule
+\end{tabular}
+\end{table}

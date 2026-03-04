@@ -1,0 +1,78 @@
+\chapter{Variabili Aleatorie Discrete}
+
+In questo capitolo ci occuperemo delle variabili aleatorie reali discrete, una delle famiglie più importanti nel calcolo delle probabilità.  
+Si tratta di variabili la cui probabilità è concentrata su singoli valori, in numero finito o numerabile, e che possono essere considerate come un'estensione delle variabili semplici.  
+Vedremo come i concetti generali introdotti in precedenza si concretizzano e si semplificano nel caso discreto.
+
+
+\begin{definizione}
+    $X:\Omega\to\mathbb{R}$ è una Variabile Aleatoria Discreta se la sua legge $P^X$ è una probabilità discreta su $\mathcal{B}(\mathbb{R})$ (Teorema \ref{th:pdiscreta}), ossia che:
+    \begin{enumerate}
+        \item $\exists \;T\subseteq\mathbb{R}$ discreto
+        \item $\exists \; p_X:T\rightarrow\mathbb{R}$, definita densità discreta, tale che: 
+        \[P^X(B) = \sum_{t\in B\cap T}p_X(t)\qquad \forall B\in \mathcal{B}(\mathbb{R})\]
+    \end{enumerate}
+    Definiamo il supporto $S = \set{t\in T:\quad p_X(t)>0}\subseteq T$ discreto.
+\end{definizione}
+\begin{definizione}[Definizioni Equivalenti alla 8.1]
+    $X$ è una variabile aleatoria discreta: 
+    \begin{align*}
+        &\iff \sum_{t\in S}(F_X(t)-F_X(t^-)) = 1 \quad \text{con}\quad S = \set{\text{punti di discontinuità}}\\
+        &\iff \exists T\subseteq\mathbb{R}\; \text{ discreto, tale che }\; \mathbb{P}(X\in T) = 1\\
+        &\iff \exists Y \;\text{ variabile aleatoria, con }\; \text{Im}(Y) \subseteq T \; \text{ tale che: }\; X\overset{\text{q.c.}}{=} Y
+    \end{align*}
+\end{definizione}
+
+\begin{esempio}
+    Sia $X$ una variabile aleatoria tale che $\mathbb{P}(X\in T) = 1$, allora di conseguenza $\exists A\in\mathcal{A}, \;\mathbb{P}(A) = 1, \;$ tale che $\;X(w) \in T$.
+
+    \medskip
+    \noindent Possiamo costruire la variabile aleatoria $Y$ tale che: $Y(w) = \begin{cases}
+        X(w),\quad&\forall w\in(X\in T)\\
+        x_0\in T, &\forall w\in(X\in T)^c
+    \end{cases}$\\
+    La quale ha che Im$(Y)\subseteq T$ per costruzione. Sempre per costruzione si che che:
+    \[(X=Y) = (X\in T) \quad\Rightarrow\quad \mathbb{P}(X=Y) = \mathbb{P}(X\in T) = 1\]
+\end{esempio}
+
+L'esempio mostra come, se una variabile aleatoria $X$ assume valori in un insieme discreto $T$ con probabilità uno, allora sia sempre possibile costruire un'altra variabile aleatoria $Y$ che coincida con $X$ su $(X \in T)$ ed assume un valore fissato $x_0 \in T$ al di fuori di tale insieme.
+
+\medskip
+Cosi facendo si ottiene una formulazione più rigorosa: ogni variabile aleatoria la cui legge è concentrata su un insieme discreto può essere rappresentata, a meno di eventi di probabilità nulla, da una variabile \emph{effettivamente discreta}. Questo permette di lavorare senza perdita di generalità con variabili che assumono valori solo in $T$.
+
+\bigskip
+\begin{proposizione}[Regola del Valore Atteso Discreto]
+    Sia $X$ una variabile aleatoria discreta definita su $(\Omega, \mathcal{A}, \mathbb{P}), \;$ con $T$ e $p$ la sua densità discreta. \\
+    Allora: \(\;\;\forall h:\mathbb{R}\to [0, +\infty]\;\text{ oppure }\; \forall h\in L^1\left(\mathbb{R}, \mathcal{B}, P^X\right)\;\) si ha che:
+    \[\boxed{E[h(X)] = \int_\mathbb{R}h(x)\; dP^X = \sum_{t\in S} h(t)\cdot p_X(t)}\]
+\end{proposizione}
+
+Per il punto 1. della Regola del Valore atteso (\ref{def:regE}), si ha evidentemente che per una variabile aleatoria discreta:
+\begin{align*}
+    h(X)\in L^1(\Omega, \mathcal{A}, \mathbb{P}) \quad & \iff \quad h\in L^1(\mathbb{R}, \mathcal{B}, P^X)\\
+    & \iff \quad \int_\mathbb{R} \left|h(t)\right|\;dP^X <+\infty\\
+    & \iff \quad \sum_{t\in S} \left|h(t)\right|\;p_X(t) <+\infty
+\end{align*}
+
+Di conseguenza, possiamo osservare due fatti importanti:
+\begin{enumerate}
+    \item $X\in L^1 (\Omega, \mathcal{A}, \mathbb{P})\quad \iff \quad h(t) = \text{Id}(t), \quad \sum_{t\in S} \left|t\right|\;p_X(t) <+\infty$.\\
+    Se quindi $X\in L^1$ allora: 
+    \[\boxed {E[X] = \underset{t\in S}{\sum} t\;p_X(t)}\]
+    \item $X\in L^2 (\Omega, \mathcal{A}, \mathbb{P})\quad \iff \quad h(t) = t^2, \quad E[h(X)] = E[X^2] = \sum_{t\in S} t^2\;p_X(t) <+\infty$.\\
+    \\
+    Allora possiamo calcolare la $Var(X)$ vedendo $h(t) = (t-E[t])^2$:
+    \[\boxed{Var(X) = E\left[(X-\mu)^2\right] = E[h(X)] = \sum_{t\in S} (t-\mu)^2\;p_X(t)}\] 
+\end{enumerate}
+
+\begin{esempio}
+    Facciamo due esempi per metabolizzare i concetti.\\
+    \(\bigstar\) Sia $X\sim \mathcal{U}(\{1, ..., n\}).\;$ Allora $P^X$ è discreta, con $T=\{1, ..., n\}\;$ e $\;p_X(t) = \frac{1}{n}\;\;\forall t \in T.\;$ Allora: 
+        \begin{align*}
+            E[X] &= \sum_{t \in T} t\;p_X(t) = \sum_{k = 1}^n k\;p_X(k) = \sum_{k = 1}^nk\frac{1}{n} = \frac{n(n+1)}{2n} = \frac{n+1}{2}\\
+            \\
+            Var(X) &= \sum_{k = 1}^n \left(k-\frac{n+1}{2}\right)\;\frac{1}{n} = E[X^2] - E[X] = \sum_{k = 1}^n\frac{k^2}{n} - \left(\frac{n+1}{2}\right)= ...=\frac{n^2-1}{12} 
+        \end{align*}
+    \(\bigstar\) Se invece consideriamo $X:\mathbb{N}\to \mathbb{R},\;\Omega= \mathbb{N}, \;\mathcal{A} = 2^\mathbb{N}, \; \mathbb{P}\sim Po(\lambda)$ con $\lambda > 1$ tale che $X(k) = k!$. Allora possiamo calcolare il valore atteso; definendo $h(k) = k;\;$ allora $h(X(k)) = X(k) = k!\;$ e $\;S = \{0!, 1!, 2!, ...\}$ 
+    \[E[X] = \sum_{k=0}^{+\infty} k!\;\frac{e^{-\lambda}\lambda^k}{k!} = +\infty\]
+\end{esempio}

@@ -1,0 +1,155 @@
+\section{Uniforme Discreta}
+Distribuisce uniformemente la probabilità per tutti gli $n$ elementi: hanno tutti la stessa probabilità di realizzarsi.
+\[\mathcal U (a, b)\]
+
+\begin{figure}[H]
+\centering
+
+\begin{minipage}{0.45\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$f(x)$},
+    xlabel = {$x$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 0.12,
+    xmin = -1, xmax = 26,
+    legend style={at={(axis cs: 18,0.11)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- distrib 1 ---
+\addplot[
+    only marks,
+    black,
+    mark=*,
+    mark options={fill=black, scale=0.7}
+]
+coordinates {
+(0,0.05)(1,0.05)(2,0.05)(3,0.05)(4,0.05)
+(5,0.05)(6,0.05)(7,0.05)(8,0.05)(9,0.05)
+(10,0.05)(11,0.05)(12,0.05)(13,0.05)(14,0.05)
+(15,0.05)(16,0.05)(17,0.05)(18,0.05)(19,0.05)
+(20,0)(21,0)(22,0)(23,0)(24,0)(25,0)
+};
+%\addlegendentry{$a=0,\, b=20$}
+
+% --- distrib 2 ---
+\addplot[
+    only marks,
+    gray!60,
+    mark=*,
+    mark options={fill=gray!60, scale=0.7}
+]
+coordinates {
+(0,0)(1,0)(2,0)(3,0)
+(4,0.10)(5,0.10)(6,0.10)(7,0.10)(8,0.10)
+(9,0.10)(10,0.10)(11,0.10)(12,0.10)(13,0.10)(14,0.10)
+(15,0)(16,0)(17,0)(18,0)(19,0)
+(20,0)(21,0)(22,0)(23,0)(24,0)(25,0)
+};
+%\addlegendentry{$a=5,\, b=15$}
+
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$F(k)$},
+    xlabel = {$k$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 1.1,
+    xmin = -1, xmax = 26,
+    legend style={at={(axis cs: 18,0.25)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- F(k) dist 1 ---
+\addplot[
+    jump mark left,
+    black,
+    mark=*,
+    mark options={fill=black, scale=0.7}
+]
+coordinates{
+(0,0.05)(1,0.10)(2,0.15)(3,0.20)(4,0.25)
+(5,0.30)(6,0.35)(7,0.40)(8,0.45)(9,0.50)
+(10,0.55)(11,0.60)(12,0.65)(13,0.70)(14,0.75)
+(15,0.80)(16,0.85)(17,0.90)(18,0.95)(19,1.00)
+(20,1)(21,1)(22,1)(23,1)(24,1)(25,1)
+};
+\addlegendentry{$a=0,\, b=20$}
+
+% --- F(k) dist 2 ---
+\addplot[
+    jump mark left,
+    gray!60,
+    mark=*,
+    mark options={fill=gray!60, scale=0.7}
+]
+coordinates{
+(0,0)(1,0)(2,0)(3,0)(4,0)
+(5,0.10)(6,0.20)(7,0.30)(8,0.40)(9,0.50)
+(10,0.60)(11,0.70)(12,0.80)(13,0.90)(14,1.00)
+(15,1)(16,1)(17,1)(18,1)(19,1)
+(20,1)(21,1)(22,1)(23,1)(24,1)(25,1)
+};
+\addlegendentry{$a=5,\, b=15$}
+
+\end{axis}
+\end{tikzpicture}
+
+\end{minipage}
+
+\end{figure}
+
+\bigskip
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Supporto} 
+& $\{a, a+1, \dots, b\}\subset\mathbb{Z}$ \\
+
+\midrule
+
+\textbf{Funzione di Densità} 
+& $\mathbb{P}(X=k)=\dfrac{1}{n}$, \quad $k=a,\dots,b$ \\
+
+\midrule
+
+\textbf{Funzione di Ripartizione}
+& $F(k) = 
+\begin{cases}
+0, & k < a,\\[4pt]
+\dfrac{k-a+1}{n}, & a \le k \le b,\\[6pt]
+1, & k > b
+\end{cases}$ \\[6pt]
+
+\midrule
+
+\textbf{Valore atteso} 
+& $\mathbb{E}[X] = \dfrac{a+b}{2}$ \\
+
+\midrule
+
+\textbf{Varianza}
+& $Var(X) = \dfrac{n^2 - 1}{12}$ \\
+
+\midrule
+
+\textbf{Funzione caratteristica}
+& $\varphi_X(u) = \dfrac{1}{n} \displaystyle\sum_{k=a}^b e^{iuk}$ \\
+
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,299 @@
+\documentclass[11pt,twoside]{extbook}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            %PACKAGES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      
+
+\usepackage[
+  %paperwidth=17cm,
+  %paperheight=24cm,
+  inner=1.8cm,  % margine interno (legatura)
+  outer=1.5cm,  % margine esterno
+  top=2cm,
+  bottom=2cm
+]{geometry}
+%\usepackage{mathpazo} % Palatino (molto simile a Times ma più leggibile)
+
+\usepackage{subfiles}
+\usepackage[italian]{babel}
+\usepackage{fontspec}
+\setmainfont{Source Sans Pro Light}
+\usepackage{latexsym}
+\usepackage{amsmath,amsfonts,amssymb,amsthm}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{microtype} 
+\usepackage{graphicx} 
+% migliore spezzatura/kerning
+\emergencystretch=2em                  % elasticità extra per righe difficili
+\raggedbottom 
+
+\usepackage[section]{placeins}
+\usepackage{mathdots}
+\usepackage{cancel}
+\usepackage{color}
+\usepackage{siunitx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{subcaption}
+\usetikzlibrary{fadings}
+\usetikzlibrary{patterns}
+\usetikzlibrary{shadows.blur}
+\usepackage{placeins} % The placeins package gives the command \FloatBarrier, which will make sure any floats will be put in before this point
+\usepackage{flafter}  % The flafter package ensures that floats don't appear until after they appear in the code.
+\usepackage{bigints}
+\usepackage{needspace}
+\usepackage{import}
+\usepackage{pdfpages}
+\usepackage{transparent}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{mathrsfs}
+\usepackage[none]{hyphenat} % Per non far andare a capo le parole con il trattino
+\usepackage[hidelinks]{hyperref} % Rende l'indice interattivo e hidelinks nasconde il bordo rosso dai riferimenti
+\usepackage[toc,page]{appendix}
+\usepackage{titlesec}
+\usepackage{paralist}
+\usepackage{enumitem}
+\usepackage{pgfplots, tikz}
+\usetikzlibrary{trees}
+\usetikzlibrary{positioning, calc}
+\usepackage{import}
+\usepackage{wasysym}
+\usepackage{cancel}
+\usepackage{fontawesome}
+\usetikzlibrary{intersections}
+\usepackage{bm}
+\usepackage{tikz-3dplot}
+
+\usetikzlibrary{arrows.meta, calc}
+\usetikzlibrary{decorations.pathreplacing}
+\pgfplotsset{compat=1.18}
+
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage[most]{tcolorbox} 
+\allowdisplaybreaks
+\tcbset{before skip=7pt, after skip=7pt} % come skipabove/skipbelow
+\usepackage{stmaryrd}
+
+
+% Header e footer in stile libro
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{} % pulisci
+
+% cosa mostrare in header
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+
+% header: capitolo a sinistra (pagine pari), sezione a destra (dispari)
+\fancyhead[LE]{\small\itshape \nouppercase{\leftmark}}
+\fancyhead[RO]{\small\itshape \nouppercase{\rightmark}}
+
+% numero pagina centrato in basso
+\fancyfoot[C]{\small\thepage}
+
+% linee
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\ind}{\mathrel{\perp\!\!\!\perp}}
+\newcommand{\verteq}{\rotatebox[origin=c]{90}{$=$}} % uguale verticale
+
+% spaziatura compatta dell'header
+\setlength{\headheight}{13.6pt}   % evita warning
+\setlength{\headsep}{10pt}        % meno aria sotto l'header
+
+
+
+
+% --- Stile teoremi ------------------------------------------------------------
+\makeatletter
+\newtheoremstyle{blacknumbox}
+  {0pt}{0pt}            % spazio sopra/sotto
+  {\normalfont}{}       % corpo normale
+  {\bfseries\scshape}   % titolo in small caps
+  {:\;}                 % punteggiatura dopo il titolo
+  {0.25em}              % spazio dopo il titolo
+  {\small
+    \thmname{#1}\nobreakspace
+    \thmnumber{\@ifnotempty{#1}{\@upn{#2}}}%
+    \thmnote{ \normalfont\bfseries\nobreakspace#3 }%
+  }
+\makeatother
+
+\theoremstyle{blacknumbox}
+
+% --- Contatore master (section per article / chapter per book) ----------------
+\makeatletter
+\@ifundefined{chapter}
+  {\newtheorem{thmT}{Teorema}[section]}
+  {\newtheorem{thmT}{Teorema}[chapter]}
+\makeatother
+
+% --- Tutti gli ambienti numerati condividono thmT -----------------------------
+\newtheorem{definitionT}[thmT]{Definizione}
+\newtheorem{NBT}[thmT]{NB}
+\newtheorem{propositionT}[thmT]{Proposizione}
+\newtheorem{corollarioT}[thmT]{Corollario}
+\newtheorem{lemmaT}[thmT]{Lemma}
+\newtheorem{teoremaT}[thmT]{Teorema}
+
+% --- Quelli non numerati ------------------------------------------------------
+\newtheorem*{ossT}{Osservazione}
+\newtheorem*{exT}{Esempio}
+
+% --- Definizione insiemi ------------------------------------------------------
+\DeclarePairedDelimiter\set{\{}{\}}
+\renewcommand{\set}[1]{\Bigl\{\,#1\,\Bigr\}}
+
+\tcbset{
+  bwstyle/.style={
+    enhanced, breakable, frame hidden, % niente cornice completa
+    borderline west={1pt}{0pt}{black}, % solo linea sinistra nera 1pt
+    colback=white, left=5pt, right=5pt, top=5pt, bottom=5pt, boxsep=0pt
+  },
+  bstyle/.style={
+    enhanced, breakable, frame hidden,
+    colback=blue!5, left=5pt, right=5pt, top=5pt, bottom=5pt, boxsep=0pt
+  },
+  ostyle/.style={
+    enhanced, breakable, frame hidden,
+    borderline west={1pt}{0pt}{orange},
+    colback=orange!5, left=5pt, right=5pt, top=5pt, bottom=5pt, boxsep=0pt
+  },
+  gstyle/.style={
+    enhanced, breakable, frame hidden,
+    borderline west={2pt}{0pt}{green},
+    colback=green!5, left=5pt, right=5pt, top=5pt, bottom=5pt, boxsep=0pt
+  }
+}
+
+
+\newenvironment{bwBox}{\begin{tcolorbox}[bwstyle]}{\end{tcolorbox}}
+\newenvironment{bBox}{\begin{tcolorbox}[bstyle]}{\end{tcolorbox}}
+\newenvironment{oBox}{\begin{tcolorbox}[ostyle]}{\end{tcolorbox}}
+\newenvironment{gBox}{\begin{tcolorbox}[gstyle]}{\end{tcolorbox}}
+
+
+\newenvironment{teorema}{\begin{bwBox}\begin{teoremaT}}{\end{teoremaT}\end{bwBox}}
+\newenvironment{proposizione}{\begin{bwBox}\begin{propositionT}}{\end{propositionT}\end{bwBox}}
+\newenvironment{definizione}{\begin{bwBox}\begin{definitionT}}{\end{definitionT}\end{bwBox}}
+\newenvironment{nb}{\begin{bwBox}\begin{NBT}}{\end{NBT}\end{bwBox}}
+\newenvironment{oss}{\begin{bwBox}\begin{ossT}}{\end{ossT}\end{bwBox}}
+\newenvironment{corollario}{\begin{bwBox}\begin{corollarioT}}{\end{corollarioT}\end{bwBox}}
+\newenvironment{lemma}{\begin{bwBox}\begin{lemmaT}}{\end{lemmaT}\end{bwBox}}
+\newenvironment{esempio}{\begin{oBox}\begin{exT}}{\end{exT}\end{oBox}}
+
+
+% --- dimostrazione annidata e spezzabile ---
+\renewcommand{\qedsymbol}{$\square$}
+\newenvironment{dimostrazione}
+  {\begin{bBox}\begin{proof}[Dimostrazione]}
+  {\end{proof}\end{bBox}}
+
+
+\titleformat{\chapter}[hang]
+  {\normalfont\Huge\bfseries} % più grande di Large
+  {\thechapter}{1em}{}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries} % da normalsize a Large
+  {\thesection}{0.7em}{}
+
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries} % da small a normali
+  {\thesubsection}{0.7em}{}
+
+\titleformat{\subsubsection}
+  {\normalfont\small\bfseries} % da footnotesize a small
+  {\thesubsubsection}{0.5em}{}
+
+
+% Spaziature (molto ridotte)
+\titlespacing*{\chapter}{0pt}{10pt}{5pt}       % sopra=10pt, sotto=5pt
+\titlespacing*{\section}{0pt}{6pt}{3pt}        % sopra=6pt, sotto=3pt
+\titlespacing*{\subsection}{0pt}{4pt}{2pt}     % sopra=4pt, sotto=2pt
+\titlespacing*{\subsubsection}{0pt}{3pt}{1pt}  % sopra=3pt, sotto=1pt
+
+\newcommand{\ve}[1]{\underline{{\boldsymbol{#1}}}}
+% --- Prodotto scalare tra vettori con \ve automatico ---
+\newcommand{\scalar}[2]{\left\langle \ve{#1},\, \ve{#2} \right\rangle}
+\newcommand{\E}[1]{E\!\left[\,#1\,\right]}
+\newcommand{\ex}[1]{%
+  \exp\!\left\{#1 \right\}%
+}
+\newcommand{\nlongrightarrow}{\;\not\!\!\!\longrightarrow}
+\newcommand{\nLongrightarrow}{\;\not\!\!\!\Longrightarrow}
+
+
+\begin{document}
+\begin{titlepage}
+\centering
+
+\vspace*{5cm}
+
+{\Huge\textsc{Dispense di Probabilità}}\\
+\vspace*{1cm}
+{\Large A cura di Marco Zamboni}
+
+\vfill
+{Politecnico di Milano\\
+Corso di Laurea in Ingegneria Matematica\\
+A.A. 2024/2025}
+
+\end{titlepage}
+
+\let\cleardoublepage\clearpage 
+
+\tableofcontents
+
+\part{Teoria}
+\include{Teoria/ch1}
+\include{Teoria/ch2}
+\include{Teoria/ch3}
+\include{Teoria/ch4}
+\include{Teoria/ch5}
+\include{Teoria/ch6}
+\include{Teoria/ch7}
+\include{Teoria/ch8}
+\include{Teoria/ch9}
+\include{Teoria/ch10}
+\include{Teoria/ch11}
+\include{Teoria/ch12}
+\include{Teoria/ch13}
+\include{Teoria/ch14}
+\include{Teoria/ch15}
+
+
+\part{Appendici}
+
+\appendix
+\chapter{Dispense Integrative}
+\include{Dispense_Integrative/calcolo_combinatorio}
+\include{Dispense_Integrative/complex_log}
+\include{Dispense_Integrative/sqrt_matrix}
+
+\chapter{Distribuzioni Discrete}
+\include{Distribuzioni/Discrete/Uniforme_disc} 
+\include{Distribuzioni/Discrete/Bernoulli}
+\include{Distribuzioni/Discrete/Binomiale}
+\include{Distribuzioni/Discrete/Poisson}
+\include{Distribuzioni/Discrete/Geometrica}
+\include{Distribuzioni/Discrete/Ipergeometrica}
+
+\chapter{Distribuzioni Continue}
+\include{Distribuzioni/Continue/Uniforme_cont}
+\include{Distribuzioni/Continue/Esponenziale}
+\include{Distribuzioni/Continue/Normale}
+\include{Distribuzioni/Continue/Gamma}
+
+
+\end{document}

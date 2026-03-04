@@ -1,0 +1,143 @@
+\section{Bernoulli}
+Modella un esperimento con due soli esiti: successo (1) e insuccesso (0). La probabilità di successo è $p\in[0,1]$.
+\[
+Be(p)
+\]
+
+\begin{figure}[H]
+\centering
+
+\begin{minipage}{0.45\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$f(k)$},
+    xlabel = {$k$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 1.1,
+    xmin = -0.5, xmax = 1.5,
+    xtick = {0,1},
+    legend style={at={(axis cs: 0.05,1.05)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- distrib 1: p=0.30 ---
+\addplot[
+    only marks,
+    black,
+    mark=*,
+    mark options={fill=black, scale=1.0}
+]
+coordinates {
+(0,0.70) (1,0.30)
+};
+
+
+% --- distrib 2: p=0.70 ---
+\addplot[
+    only marks,
+    gray!60,
+    mark=*,
+    mark options={fill=gray!60, scale=1.0}
+]
+coordinates {
+(0,0.30) (1,0.70)
+};
+
+
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$F(k)$},
+    xlabel = {$k$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 1.1,
+    xmin = -0.5, xmax = 1.5,
+    xtick = {0,1},
+    legend style={at={(axis cs: 1.05, 0.3)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- F(k) dist 1: p=0.30 ---
+\addplot[
+    jump mark left,
+    black,
+    mark=*,
+    mark options={fill=black, scale=1.0}
+]
+coordinates{
+(0,0.70) (1,1.00) (1.5,1.00)
+};
+\addlegendentry{$p=0.30$}
+
+% --- F(k) dist 2: p=0.70 ---
+\addplot[
+    jump mark left,
+    gray!60,
+    mark=*,
+    mark options={fill=gray!60, scale=1.0}
+]
+coordinates{
+ (0,0.30) (1,1.00) (1.5,1.00)
+};
+\addlegendentry{$p=0.70$}
+
+\end{axis}
+\end{tikzpicture}
+
+\end{minipage}
+
+\end{figure}
+
+\bigskip
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Supporto} 
+& $\{0,1\}$ \\
+
+\midrule
+
+\textbf{Funzione di Massa di Probabilità} 
+& $\mathbb{P}(X=1)=p,\qquad \mathbb{P}(X=0)=1-p$ \\
+
+\midrule
+
+\textbf{Funzione di Ripartizione}
+& $F(k)=
+\begin{cases}
+0, & k<0,\\[4pt]
+1-p, & 0\le k<1,\\[4pt]
+1, & k\ge 1.
+\end{cases}$ \\[6pt]
+
+\midrule
+
+\textbf{Valore atteso} 
+& $\mathbb{E}[X]=p$ \\
+
+\midrule
+
+\textbf{Varianza}
+& $Var(X)=p(1-p)$ \\
+
+\midrule
+
+\textbf{Funzione caratteristica}
+& $\varphi_X(u)=\mathbb{E}[e^{iuX}]=(1-p)+p\,e^{iu}$ \\
+
+\bottomrule
+\end{tabular}
+\end{table}

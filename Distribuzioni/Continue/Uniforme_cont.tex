@@ -1,0 +1,149 @@
+\section{Uniforme Continua}
+
+La distribuzione \emph{Uniforme continua} assegna la stessa densità di probabilità
+a tutti i valori appartenenti all’intervallo $[a,b]$.
+In altre parole, ogni sottointervallo di uguale lunghezza ha la stessa probabilità
+di realizzarsi.
+
+\[
+\mathcal{U}(a,b)
+\]
+
+\begin{figure}[H]
+\centering
+
+\begin{minipage}{0.45\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$f(x)$},
+    xlabel = {$x$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 0.12,
+    xmin = -1, xmax = 26,
+    legend style={at={(axis cs: 18,0.11)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- densità dist 1: U(0,20), h=0.05 ---
+\addplot[
+    black,
+    thick
+] coordinates {
+(-1,0) (0,0) (0,0.05) (20,0.05) (20,0) (26,0)
+};
+%\addlegendentry{$a=0,\, b=20$}
+
+% --- densità dist 2: U(5,15), h=0.10 ---
+\addplot[
+    gray!60,
+    thick
+] coordinates {
+(-1,0) (5,0) (5,0.10) (15,0.10) (15,0) (26,0)
+};
+%\addlegendentry{$a=5,\, b=15$}
+
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$F(x)$},
+    xlabel = {$x$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 1.1,
+    xmin = -1, xmax = 26,
+    legend style={at={(axis cs: 18,0.25)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- CDF dist 1: U(0,20) ---
+\addplot[
+    black,
+    thick
+] coordinates {
+(-1,0) (0,0)
+(20,1) (26,1)
+};
+\addlegendentry{$a=0,\, b=20$}
+
+% --- CDF dist 2: U(5,15) ---
+\addplot[
+    gray!60,
+    thick
+] coordinates {
+(-1,0) (5,0)
+(15,1) (26,1)
+};
+\addlegendentry{$a=5,\, b=15$}
+
+\end{axis}
+\end{tikzpicture}
+
+\end{minipage}
+
+\end{figure}
+
+
+\bigskip
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Supporto} 
+& $[a,b]\subset\mathbb{R}$ \\
+
+\midrule
+
+\textbf{Funzione di densità} 
+& $
+f_X(x)=
+\begin{cases}
+\dfrac{1}{b-a}, & a \le x \le b,\\[6pt]
+0, & \text{altrimenti}
+\end{cases}
+$ \\
+
+\midrule
+
+\textbf{Funzione di ripartizione}
+& $
+F_X(x)=
+\begin{cases}
+0, & x < a,\\[6pt]
+\dfrac{x-a}{b-a}, & a \le x \le b,\\[6pt]
+1, & x > b
+\end{cases}
+$ \\
+
+\midrule
+
+\textbf{Valore atteso} 
+& $\mathbb{E}[X] = \dfrac{a+b}{2}$ \\
+
+\midrule
+
+\textbf{Varianza}
+& $Var(X) = \dfrac{(b-a)^2}{12}$ \\
+
+\midrule
+
+\textbf{Funzione caratteristica}
+& $
+\varphi_X(u)
+=
+\dfrac{e^{iub}-e^{iua}}{iu(b-a)}
+$ \\
+
+\bottomrule
+\end{tabular}
+\end{table}

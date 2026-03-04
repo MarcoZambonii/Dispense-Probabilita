@@ -1,0 +1,65 @@
+\section{Radice Quadrata di una Matrice}
+
+In molte applicazioni, in particolare nello studio delle distribuzioni gaussiane
+multivariate, compare l’espressione $\sqrt{C}$, dove $C$ è una matrice. In 
+questa appendice spieghiamo con precisione cosa significhi ``fare la radice
+quadrata'' di una matrice e perché questo concetto è utile.
+
+\begin{definizione}[Radice Quadrata]
+    Sia $C$ una matrice quadrata $d\times d$. Una matrice $A$ si dice 
+\textit{radice quadrata} di $C$ se soddisfa
+\[
+A^2 = A A = C.
+\]
+\end{definizione}
+
+
+Questa non è in generale univoca: possono esistere molte matrici diverse $A$
+tali che $A^2=C$. Tuttavia, quando $C$ è simmetrica e definita positiva, la
+situazione diventa molto più semplice.
+
+\bigskip
+\noindent Sia $C$ simmetrica definita positiva. Allora:
+
+\begin{itemize}
+    \item tutti gli autovalori di $C$ sono reali e positivi,
+    \item $C$ è diagonalizzabile ortogonalmente: 
+    \[
+    C = Q \Lambda Q^\top,
+    \]
+\end{itemize}
+dove $\Lambda=\mathrm{diag}(\lambda_1,\dots,\lambda_d)$ con $\lambda_i>0$, e $Q$ è ortogonale.
+
+\begin{definizione}[Radice Principale]
+    In questo caso possiamo definire la \textit{radice quadrata principale} come:
+\[
+\sqrt{C} := Q\,\sqrt{\Lambda}\,Q^\top,
+\]
+dove 
+\[
+\sqrt{\Lambda} = \mathrm{diag}(\sqrt{\lambda_1},\dots,\sqrt{\lambda_d}).
+\]
+\end{definizione}
+\noindent È immediato verificare che:
+\[
+\sqrt{C}\,\sqrt{C} = C.
+\]
+
+\noindent Questa radice quadrata è univoca, simmetrica e definita positiva.
+
+\bigskip
+\noindent Se $C$ non è definita positiva o non è simmetrica, possono esistere molte
+radici diverse. Ad esempio:
+\[
+I_2 = 
+\begin{pmatrix}
+1 & 0 \\ 0 & 1
+\end{pmatrix}
+\qquad\Rightarrow\qquad
+A = 
+\begin{pmatrix}
+\cos\theta & -\sin\theta \\
+\sin\theta & \cos\theta
+\end{pmatrix}
+\]
+soddisfa $A^2 = I_2$ per ogni $\theta$.

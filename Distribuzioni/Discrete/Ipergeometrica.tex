@@ -1,0 +1,172 @@
+\section{Ipergeometrica}
+La distribuzione ipergeometrica descrive il numero di successi ottenuti estraendo senza reinserimento un campione di dimensione $n$ da una popolazione finita di $N$ elementi, di cui $K$ sono classificati come successi e $N-K$ come insuccessi.
+\[
+\mathcal{H}(N,K,n)
+\]
+
+\begin{figure}[H]
+\centering
+
+\begin{minipage}{0.45\textwidth}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$\mathbb{P}(X=k)$},
+    xlabel = {$k$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 0.18,
+    xmin = -1, xmax = 31,
+    legend style={at={(axis cs: 1,0.17)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- Hypergeom(N=100,K=40,n=30) ---
+\addplot[
+    only marks,
+    black,
+    mark=*,
+    mark options={fill=black, scale=0.7}
+]
+coordinates {
+(5,0.001)(6,0.004)(7,0.011)(8,0.024)(9,0.044)
+(10,0.069)(11,0.098)(12,0.125)(13,0.142)(14,0.145)
+(15,0.134)(16,0.111)(17,0.082)(18,0.053)
+(19,0.030)(20,0.015)(21,0.006)(22,0.002)
+};
+
+% --- Hypergeom(N=100,K=20,n=30) ---
+\addplot[
+    only marks,
+    gray!60,
+    mark=*,
+    mark options={fill=gray!60, scale=0.7}
+]
+coordinates {
+(0,0.003)(1,0.017)(2,0.048)(3,0.092)(4,0.132)
+(5,0.155)(6,0.157)(7,0.139)(8,0.108)(9,0.074)
+(10,0.045)(11,0.023)(12,0.010)(13,0.004)(14,0.001)
+};
+
+\end{axis}
+\end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    ylabel = {$F(k)$},
+    xlabel = {$k$},
+    width = 0.90\textwidth,
+    height = 0.90\textwidth,
+    ymin = 0, ymax = 1.1,
+    xmin = -1, xmax = 31,
+    legend style={at={(axis cs: 15,0.25)}, anchor=north west, font=\tiny},
+    legend cell align=left,
+]
+
+% --- CDF Hypergeom(N=100,K=40,n=30) ---
+\addplot[
+    jump mark left,
+    black,
+    mark=*,
+    mark options={fill=black, scale=0.7}
+]
+coordinates{
+(0,4.02639294e-09)
+(1,1.59886765e-07)
+(2,2.91423177e-06)
+(3,3.25164852e-05)
+(4,0.00024996245)
+(5,0.00141298772)
+(6,0.00612431695)
+(7,0.02096773258)
+(8,0.05802744464)
+(9,0.13235803521)
+(10,0.25333107136)
+(11,0.41427080904)
+(12,0.59021881590)
+(13,0.74885530151)
+(14,0.86706008543)
+(15,0.93990925597)
+(16,0.97702670020)
+(17,0.99263553782)
+(18,0.99803720732)
+(19,0.99956893745)
+(20,0.99992276711)
+(21,0.99998884174)
+(22,0.99999871828)
+(23,0.99999988499)
+(24,0.99999999212)
+(25,0.99999999960)
+(26,0.99999999999)
+(27,1.00000000000)
+(28,1.00000000000)
+(29,1.00000000000)
+(30,1.00000000000)
+};
+
+\addlegendentry{$N=100,\,K=40,\,n=30$}
+
+% --- CDF Hypergeom(N=100,K=20,n=30) ---
+\addplot[
+    jump mark left,
+    gray!60,
+    mark=*,
+    mark options={fill=gray!60, scale=0.7}
+]
+coordinates{
+(0,0.003)(1,0.020)(2,0.068)(3,0.160)(4,0.292)
+(5,0.447)(6,0.604)(7,0.743)(8,0.851)
+(9,0.925)(10,0.970)(11,0.993)(12,0.999)
+(13,1.000)
+};
+\addlegendentry{$N=100,\,K=20,\,n=30$}
+
+\end{axis}
+\end{tikzpicture}
+
+\end{minipage}
+\end{figure}
+
+\bigskip
+\begin{table}[H]
+\centering
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Supporto} 
+& $\{\max(0,n-(N-K)),\dots,\min(n,K)\}\subset\mathbb{Z}$ \\
+
+\midrule
+
+\textbf{Funzione di Densità} 
+& $\displaystyle
+\mathbb{P}(X=k)=
+\frac{\binom{K}{k}\binom{N-K}{\,n-k\,}}{\binom{N}{n}}
+$ \\
+
+\midrule
+
+\textbf{Funzione di Ripartizione}
+& $F(k)=\displaystyle\sum_{j=0}^{\lfloor k\rfloor}
+\frac{\binom{K}{j}\binom{N-K}{\,n-j\,}}{\binom{N}{n}}$ \\
+
+\midrule
+
+\textbf{Valore atteso} 
+& $\mathbb{E}[X]=n\frac{K}{N}$ \\
+
+\midrule
+
+\textbf{Varianza}
+& $Var(X)=n\frac{K}{N}\left(1-\frac{K}{N}\right)
+\frac{N-n}{N-1}$ \\
+
+\bottomrule
+\end{tabular}
+\end{table}
