@@ -236,19 +236,57 @@
 
 \begin{document}
 \begin{titlepage}
-\centering
+\newfontfamily\titolofont{Source Sans Pro}
+\begin{tikzpicture}[remember picture, overlay]
 
-\vspace*{5cm}
+  % ---- cornice doppia ----
+  \draw[line width=1pt]
+    ($(current page.north west)+(0.9,-0.9)$) rectangle ($(current page.south east)+(-0.9,0.9)$);
+  \draw[line width=0.4pt]
+    ($(current page.north west)+(1.08,-1.08)$) rectangle ($(current page.south east)+(-1.08,1.08)$);
 
-{\Huge\textsc{Dispense di Probabilità}}\\
-\vspace*{1cm}
-{\Large A cura di Marco Zamboni}
+  % ---- intestazione ----
+  \node[anchor=north] at ($(current page.north)+(0,-2.3)$)
+    {\scshape\large Politecnico di Milano};
+  \node[anchor=north] at ($(current page.north)+(0,-3.1)$)
+    {\itshape Corso di Laurea in Ingegneria Matematica};
+  \draw[line width=0.4pt]
+    ($(current page.north)+(-2.6,-4.0)$) -- ($(current page.north)+(2.6,-4.0)$);
 
-\vfill
-{Politecnico di Milano\\
-Corso di Laurea in Ingegneria Matematica\\
-A.A. 2024/2025}
+  % ---- titolo ----
+  \node at ($(current page.north)+(0,-8.0)$)
+    {\titolofont\fontsize{26}{32}\selectfont\itshape Dispense di};
+  \node at ($(current page.north)+(0,-10.3)$)
+    {\titolofont\fontsize{50}{60}\selectfont\bfseries\scshape Probabilità};
 
+  % ---- istogramma che converge alla gaussiana ----
+  \begin{scope}[shift={($(current page.north)+(0,-19.6)$)}, xscale=1.35, yscale=4.6]
+    \foreach \x/\h in {-3.25/0.02, -2.75/0.03, -2.25/0.10, -1.75/0.19,
+                       -1.25/0.49, -0.75/0.72, -0.25/1.00, 0.25/0.95,
+                        0.75/0.78, 1.25/0.44, 1.75/0.23, 2.25/0.07,
+                        2.75/0.03, 3.25/0.015}
+      \draw[fill=RoyalBlue!12, draw=RoyalBlue!60, line width=0.3pt]
+        (\x-0.235,0) rectangle (\x+0.235,\h);
+    \draw[orange, dashed, line width=0.8pt] (0,0) -- (0,1.08);
+    \node[orange, above] at (0,1.08) {\small $\mu$};
+    \draw[line width=1.1pt, smooth, domain=-3.6:3.6, samples=120]
+      plot (\x, {exp(-\x*\x/2)});
+    \draw[line width=0.6pt] (-3.95,0) -- (3.95,0);
+  \end{scope}
+
+  \node at ($(current page.north)+(0,-21.1)$)
+    {\color{gray}$\displaystyle \varphi(x)=\frac{1}{\sqrt{2\pi}}\,e^{-x^2/2}$};
+
+  % ---- autore ----
+  \draw[line width=0.4pt]
+    ($(current page.south)+(-2.6,4.6)$) -- ($(current page.south)+(2.6,4.6)$);
+  \node at ($(current page.south)+(0,3.7)$)
+    {\Large\scshape Marco Zamboni};
+  \node at ($(current page.south)+(0,2.9)$)
+    {A.A. 2024/2025};
+
+\end{tikzpicture}
+\null
 \end{titlepage}
 
 \let\cleardoublepage\clearpage 
